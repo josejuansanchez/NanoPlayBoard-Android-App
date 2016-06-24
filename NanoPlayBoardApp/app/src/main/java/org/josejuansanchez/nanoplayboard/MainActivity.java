@@ -20,6 +20,8 @@ import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
+import tr.xip.markview.MarkView;
+
 // This code is based on the example availabe in the UsbSerial repository:
 // https://github.com/felHR85/UsbSerial
 
@@ -51,11 +53,13 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private UsbService usbService;
-    private TextView potentiometer;
-    private TextView ldr;
+    private MarkView markViewPotentiometer;
+    private MarkView markViewLdr;
+
     private TextView log;
     private EditText editText;
     private MyHandler mHandler;
+
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -76,8 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
         mHandler = new MyHandler(this);
 
-        potentiometer = (TextView) findViewById(R.id.textview_potentiometer);
-        ldr = (TextView) findViewById(R.id.textview_ldr);
+        markViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
+        markViewLdr = (MarkView) findViewById(R.id.mark_ldr);
+
         /*
         log = (TextView) findViewById(R.id.textview_log);
         editText = (EditText) findViewById(R.id.edittext_command);
@@ -151,9 +156,13 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
+
+                    if (msg.obj == null) return;
+
                     NanoPlayBoardMessage message = (NanoPlayBoardMessage) msg.obj;
-                    mActivity.get().potentiometer.setText(String.valueOf(message.getPotentiometer()));
-                    mActivity.get().ldr.setText(String.valueOf(message.getLdr()));
+
+                    mActivity.get().markViewPotentiometer.setMark(message.getPotentiometer());
+                    mActivity.get().markViewLdr.setMark(message.getLdr());
 
                     /*
                     try {
