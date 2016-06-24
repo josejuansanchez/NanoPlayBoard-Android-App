@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     };
     private UsbService usbService;
     private TextView display;
+    private TextView log;
     private EditText editText;
     private MyHandler mHandler;
     private final ServiceConnection usbConnection = new ServiceConnection() {
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new MyHandler(this);
 
         display = (TextView) findViewById(R.id.textview_display);
+        log = (TextView) findViewById(R.id.textview_log);
         editText = (EditText) findViewById(R.id.edittext_command);
         Button sendButton = (Button) findViewById(R.id.button_send);
 
@@ -146,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    mActivity.get().display.append(data);
+                    mActivity.get().log.append(data);
+                    mActivity.get().display.setText(data);
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();

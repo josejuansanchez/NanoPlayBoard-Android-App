@@ -13,7 +13,17 @@
         android:id="@+id/textview_display"
         android:layout_width="match_parent"
         android:layout_height="150dp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:gravity="center"
+        android:layout_marginTop="34dp"
+        android:background="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/textview_log"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textview_display"
         android:layout_marginTop="34dp"
         android:background="#FFFFFF"
         android:scrollbars="vertical"
@@ -23,7 +33,7 @@
         android:id="@+id/edittext_command"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textview_display"
+        android:layout_below="@+id/textview_log"
         android:layout_marginTop="28dp"
         android:ems="10" />
 
