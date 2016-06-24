@@ -16,6 +16,10 @@ import android.os.IBinder;
 import com.felhr.usbserial.CDCSerialDevice;
 import com.felhr.usbserial.UsbSerialDevice;
 import com.felhr.usbserial.UsbSerialInterface;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -63,11 +67,19 @@ public class UsbService extends Service {
         public void onReceivedData(byte[] arg0) {
             try {
                 String data = new String(arg0, "UTF-8");
+
+                // Convert json to a NanoPlayBoardMessage object
+                Gson gson = new Gson();
+                final NanoPlayBoardMessage message = gson.fromJson(data, NanoPlayBoardMessage.class);
+
                 if (mHandler != null)
-                    mHandler.obtainMessage(MESSAGE_FROM_SERIAL_PORT, data).sendToTarget();
+                    mHandler.obtainMessage(MESSAGE_FROM_SERIAL_PORT, message).sendToTarget();
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+            } catch (JsonSyntaxException jse) {
+                jse.printStackTrace();
             }
+
         }
     };
 

@@ -10,20 +10,50 @@
     tools:context="org.josejuansanchez.nanoplayboard.MainActivity">
 
     <TextView
-        android:id="@+id/textview_display"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:id="@+id/textview_potentiometer_label"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="34dp"
+        android:text="Potentiometer"/>
+
+    <TextView
+        android:id="@+id/textview_potentiometer"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_below="@+id/textview_potentiometer_label"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
         android:background="#FFFFFF" />
 
+    <TextView
+        android:id="@+id/textview_ldr_label"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:layout_alignRight="@+id/textview_potentiometer_label"
+        android:text="LDR"/>
+
+    <TextView
+        android:id="@+id/textview_ldr"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/textview_potentiometer"
+        android:layout_below="@id/textview_ldr_label"
+        android:gravity="center"
+        android:layout_marginTop="8dp"
+        android:background="#FFFFFF" />
+
+    <!--
     <TextView
         android:id="@+id/textview_log"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textview_display"
+        android:layout_below="@+id/textview_ldr"
         android:layout_marginTop="34dp"
         android:background="#FFFFFF"
         android:scrollbars="vertical"
@@ -44,6 +74,6 @@
         android:layout_below="@+id/edittext_command"
         android:layout_marginTop="42dp"
         android:text="Send"/>
-
+    -->
 
 </RelativeLayout>

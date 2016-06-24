@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by josejuansanchez on 24/6/16.
  */
-public class Message implements Serializable {
+public class NanoPlayBoardMessage implements Serializable {
     private int potentiometer;
     private int ldr;
 

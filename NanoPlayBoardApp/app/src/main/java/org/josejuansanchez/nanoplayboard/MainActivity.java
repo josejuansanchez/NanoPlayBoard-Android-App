@@ -11,11 +11,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private UsbService usbService;
-    private TextView display;
+    private TextView potentiometer;
+    private TextView ldr;
     private TextView log;
     private EditText editText;
     private MyHandler mHandler;
@@ -75,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
 
         mHandler = new MyHandler(this);
 
-        display = (TextView) findViewById(R.id.textview_display);
+        potentiometer = (TextView) findViewById(R.id.textview_potentiometer);
+        ldr = (TextView) findViewById(R.id.textview_ldr);
+        /*
         log = (TextView) findViewById(R.id.textview_log);
         editText = (EditText) findViewById(R.id.edittext_command);
         Button sendButton = (Button) findViewById(R.id.button_send);
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        */
     }
 
     @Override
@@ -147,9 +151,24 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
-                    String data = (String) msg.obj;
-                    mActivity.get().log.append(data);
-                    mActivity.get().display.setText(data);
+                    NanoPlayBoardMessage message = (NanoPlayBoardMessage) msg.obj;
+                    mActivity.get().potentiometer.setText(String.valueOf(message.getPotentiometer()));
+                    mActivity.get().ldr.setText(String.valueOf(message.getLdr()));
+
+                    /*
+                    try {
+                        // Convert json to a NanoPlayBoardMessage object
+                        Gson gson = new Gson();
+                        final NanoPlayBoardMessage message = gson.fromJson(json, NanoPlayBoardMessage.class);
+
+                        mActivity.get().log.append(json);
+                        mActivity.get().potentiometer.setText(String.valueOf(message.getPotentiometer()));
+                        mActivity.get().ldr.setText(String.valueOf(message.getLdr()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    */
+
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();
