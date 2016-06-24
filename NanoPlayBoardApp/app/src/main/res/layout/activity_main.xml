@@ -10,7 +10,30 @@
     tools:context="org.josejuansanchez.nanoplayboard.MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textview_display"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:background="#FFFFFF"
+        android:scrollbars="vertical"
+        android:gravity="bottom" />
+
+    <EditText
+        android:id="@+id/edittext_command"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_below="@+id/textview_display"
+        android:layout_marginTop="28dp"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/button_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext_command"
+        android:layout_marginTop="42dp"
+        android:text="Send"/>
+
+
 </RelativeLayout>
