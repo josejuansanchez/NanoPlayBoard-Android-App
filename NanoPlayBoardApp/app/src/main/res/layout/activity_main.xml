@@ -53,6 +53,15 @@
         app:mv_strokeWidth="12dp"
         app:mv_textSize="48sp" />
 
+    <com.christophesmet.android.views.colorpicker.ColorPickerView
+        android:id="@+id/colorpicker"
+        app:wheelDrawable="@drawable/img_wheel"
+        app:thumbDrawable="@drawable/img_wheel_handle"
+        app:radiusOffset="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/mark_ldr" />
 
     <!--
     <TextView
@@ -60,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textview_ldr"
+        android:layout_below="@+id/colorpicker"
         android:layout_marginTop="34dp"
         android:background="#FFFFFF"
         android:scrollbars="vertical"

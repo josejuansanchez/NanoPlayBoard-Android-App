@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class NanoPlayBoardMessage implements Serializable {
     private int potentiometer;
     private int ldr;
+    private String error;
 
     public int getPotentiometer() {
         return potentiometer;
@@ -23,5 +24,13 @@ public class NanoPlayBoardMessage implements Serializable {
 
     public void setLdr(int ldr) {
         this.ldr = ldr;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

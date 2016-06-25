@@ -6,15 +6,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.christophesmet.android.views.colorpicker.ColorPickerView;
+import com.google.gson.Gson;
+
+import org.josejuansanchez.nanoplayboard.model.LedRGB;
 import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
 
 import java.lang.ref.WeakReference;
@@ -26,6 +32,8 @@ import tr.xip.markview.MarkView;
 // https://github.com/felHR85/UsbSerial
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String TAG = MainActivity.class.getSimpleName();
 
     /*
      * Notifications from UsbService will be received here.
@@ -52,24 +60,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    private UsbService usbService;
-    private MarkView markViewPotentiometer;
-    private MarkView markViewLdr;
+    private UsbService mUsbService;
+    private MarkView mMarkViewPotentiometer;
+    private MarkView mMarkViewLdr;
+    private ColorPickerView mColorPickerView;
 
-    private TextView log;
+    private TextView mLog;
     private EditText editText;
     private MyHandler mHandler;
 
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-            usbService = ((UsbService.UsbBinder) arg1).getService();
-            usbService.setHandler(mHandler);
+            mUsbService = ((UsbService.UsbBinder) arg1).getService();
+            mUsbService.setHandler(mHandler);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            usbService = null;
+            mUsbService = null;
         }
     };
 
@@ -80,11 +89,34 @@ public class MainActivity extends AppCompatActivity {
 
         mHandler = new MyHandler(this);
 
-        markViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
-        markViewLdr = (MarkView) findViewById(R.id.mark_ldr);
+        mMarkViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
+        mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
+        mColorPickerView = (ColorPickerView) findViewById(R.id.colorpicker);
+
+        mColorPickerView.setDrawDebug(false);
+
+        mColorPickerView.setColorListener(new ColorPickerView.ColorListener() {
+            @Override
+            public void onColorSelected(int color) {
+
+                LedRGB message = new LedRGB();
+                message.setR(Color.red(color));
+                message.setG(Color.green(color));
+                message.setB(Color.blue(color));
+
+                // if UsbService was correctly binded, Send data
+                if (mUsbService != null) {
+                    Gson gson = new Gson();
+                    Log.d(TAG, "JSON: " + gson.toJson(message));
+                    mUsbService.write(gson.toJson(message).getBytes());
+                }
+            }
+        });
+
+        // TEST
+        //mLog = (TextView) findViewById(R.id.textview_log);
 
         /*
-        log = (TextView) findViewById(R.id.textview_log);
         editText = (EditText) findViewById(R.id.edittext_command);
         Button sendButton = (Button) findViewById(R.id.button_send);
 
@@ -93,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (!editText.getText().toString().equals("")) {
                     String data = editText.getText().toString();
-                    if (usbService != null) { // if UsbService was correctly binded, Send data
-                        usbService.write(data.getBytes());
+                    if (mUsbService != null) { // if UsbService was correctly binded, Send data
+                        mUsbService.write(data.getBytes());
                     }
                 }
             }
@@ -161,22 +193,11 @@ public class MainActivity extends AppCompatActivity {
 
                     NanoPlayBoardMessage message = (NanoPlayBoardMessage) msg.obj;
 
-                    mActivity.get().markViewPotentiometer.setMark(message.getPotentiometer());
-                    mActivity.get().markViewLdr.setMark(message.getLdr());
+                    mActivity.get().mMarkViewPotentiometer.setMark(message.getPotentiometer());
+                    mActivity.get().mMarkViewLdr.setMark(message.getLdr());
 
-                    /*
-                    try {
-                        // Convert json to a NanoPlayBoardMessage object
-                        Gson gson = new Gson();
-                        final NanoPlayBoardMessage message = gson.fromJson(json, NanoPlayBoardMessage.class);
-
-                        mActivity.get().log.append(json);
-                        mActivity.get().potentiometer.setText(String.valueOf(message.getPotentiometer()));
-                        mActivity.get().ldr.setText(String.valueOf(message.getLdr()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    */
+                    // TEST
+                    //mActivity.get().mLog.append(message.getError());
 
                     break;
                 case UsbService.CTS_CHANGE:
