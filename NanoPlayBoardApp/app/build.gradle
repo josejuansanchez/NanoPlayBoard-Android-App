@@ -26,5 +26,5 @@ dependencies {
     compile 'com.github.felHR85:UsbSerial:4.3'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.github.xiprox.markview:library:1.+'
-    compile 'com.github.christophesmet:colorpicker:d84191b1cf'
+    compile 'com.github.josejuansanchez:colorpicker:c200c02'
 }

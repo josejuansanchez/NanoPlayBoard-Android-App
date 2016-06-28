@@ -28,7 +28,7 @@ import java.util.Set;
 
 import tr.xip.markview.MarkView;
 
-// This code is based on the example availabe in the UsbSerial repository:
+// This code is based on the example available in the UsbSerial repository:
 // https://github.com/felHR85/UsbSerial
 
 public class MainActivity extends AppCompatActivity {
@@ -99,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onColorSelected(int color) {
 
+            }
+
+            @Override
+            public void onStopTrackingTouch(int color) {
                 LedRGB message = new LedRGB();
                 message.setR(Color.red(color));
                 message.setG(Color.green(color));
