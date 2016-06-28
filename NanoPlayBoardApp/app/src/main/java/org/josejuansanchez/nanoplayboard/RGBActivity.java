@@ -6,28 +6,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
+import android.text.Html;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.christophesmet.android.views.colorpicker.ColorPickerView;
+import com.google.gson.Gson;
+
+import org.josejuansanchez.nanoplayboard.model.LedRGB;
 import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
-import tr.xip.markview.MarkView;
-
 // This code is based on the example available in the UsbSerial repository:
 // https://github.com/felHR85/UsbSerial
 
-public class MainActivity extends AppCompatActivity {
+public class RGBActivity extends AppCompatActivity {
 
-    public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = RGBActivity.class.getSimpleName();
 
     /*
      * Notifications from UsbService will be received here.
@@ -54,13 +59,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    private UsbService mUsbService;
-    private MarkView mMarkViewPotentiometer;
-    private MarkView mMarkViewLdr;
 
-    private TextView mLog;
-    private EditText editText;
+    private UsbService mUsbService;
     private MyHandler mHandler;
+    private ColorPickerView mColorPickerView;
+    private View mColorSectedView;
+    private TextView mColorSelectedRed;
+    private TextView mColorSelectedGreen;
+    private TextView mColorSelectedBlue;
 
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
@@ -78,32 +84,46 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_rgb);
 
         mHandler = new MyHandler(this);
+        mColorPickerView = (ColorPickerView) findViewById(R.id.colorpicker);
+        mColorSectedView = (View) findViewById(R.id.colorselected_view);
+        mColorSelectedRed = (TextView) findViewById(R.id.colorselected_red);
+        mColorSelectedGreen = (TextView) findViewById(R.id.colorselected_green);
+        mColorSelectedBlue = (TextView) findViewById(R.id.colorselected_blue);
+        mColorPickerView.setDrawDebug(false);
 
-        mMarkViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
-        mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
+        loadListeners();
+    }
 
-        // TEST
-        //mLog = (TextView) findViewById(R.id.textview_log);
-
-        /*
-        editText = (EditText) findViewById(R.id.edittext_command);
-        Button sendButton = (Button) findViewById(R.id.button_send);
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
+    public void loadListeners() {
+        mColorPickerView.setColorListener(new ColorPickerView.ColorListener() {
             @Override
-            public void onClick(View v) {
-                if (!editText.getText().toString().equals("")) {
-                    String data = editText.getText().toString();
-                    if (mUsbService != null) { // if UsbService was correctly binded, Send data
-                        mUsbService.write(data.getBytes());
-                    }
+            public void onColorSelected(int color) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(int color) {
+                LedRGB message = new LedRGB();
+                message.setR(Color.red(color));
+                message.setG(Color.green(color));
+                message.setB(Color.blue(color));
+
+                // if UsbService was correctly binded, Send data
+                if (mUsbService != null) {
+                    Gson gson = new Gson();
+                    Log.d(TAG, "JSON: " + gson.toJson(message));
+                    mUsbService.write(gson.toJson(message).getBytes());
                 }
+
+                mColorSectedView.setBackgroundColor(color);
+                mColorSelectedRed.setText(Html.fromHtml("R: <b>" + message.getR() + "</b>"));
+                mColorSelectedGreen.setText(Html.fromHtml("G: <b>" + message.getG() + "</b>"));
+                mColorSelectedBlue.setText(Html.fromHtml("B: <b>" + message.getB() + "</b>"));
             }
         });
-        */
     }
 
     @Override
@@ -150,9 +170,9 @@ public class MainActivity extends AppCompatActivity {
      * This handler will be passed to UsbService. Data received from serial port is displayed through this handler
      */
     private static class MyHandler extends Handler {
-        private final WeakReference<MainActivity> mActivity;
+        private final WeakReference<RGBActivity> mActivity;
 
-        public MyHandler(MainActivity activity) {
+        public MyHandler(RGBActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
@@ -164,8 +184,10 @@ public class MainActivity extends AppCompatActivity {
                     if (msg.obj == null) return;
 
                     NanoPlayBoardMessage message = (NanoPlayBoardMessage) msg.obj;
-                    mActivity.get().mMarkViewPotentiometer.setMark(message.getPotentiometer());
-                    mActivity.get().mMarkViewLdr.setMark(message.getLdr());
+
+                    // TEST
+                    //mActivity.get().mLog.append(message.getError());
+
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();
