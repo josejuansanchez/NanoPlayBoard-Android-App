@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard;
+package org.josejuansanchez.nanoplayboard.activities;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -13,8 +13,9 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
-import org.josejuansanchez.nanoplayboard.service.UsbService;
+import org.josejuansanchez.nanoplayboard.R;
+import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
+import org.josejuansanchez.nanoplayboard.services.UsbService;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;

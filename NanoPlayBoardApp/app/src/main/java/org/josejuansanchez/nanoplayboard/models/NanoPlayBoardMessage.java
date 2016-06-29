@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard.model;
+package org.josejuansanchez.nanoplayboard.models;
 
 import java.io.Serializable;
 

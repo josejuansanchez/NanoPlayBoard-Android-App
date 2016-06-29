@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard.model;
+package org.josejuansanchez.nanoplayboard.models;
 
 /**
  * Created by josejuansanchez on 29/06/16.

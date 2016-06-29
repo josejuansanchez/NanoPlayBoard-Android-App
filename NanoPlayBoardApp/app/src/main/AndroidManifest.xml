@@ -8,23 +8,23 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PotentiometerActivity" />
-        <activity android:name=".LDRActivity" />
-        <activity android:name=".RGBActivity" />
+        <activity android:name=".activities.PotentiometerActivity" />
+        <activity android:name=".activities.LDRActivity" />
+        <activity android:name=".activities.RGBActivity" />
 
         <service
-            android:name=".service.UsbService"
+            android:name=".services.UsbService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".BuzzerActivity"></activity>
+        <activity android:name=".activities.BuzzerActivity"></activity>
     </application>
 
 </manifest>

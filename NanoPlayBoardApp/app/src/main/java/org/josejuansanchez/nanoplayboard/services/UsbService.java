@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard.service;
+package org.josejuansanchez.nanoplayboard.services;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -20,7 +20,7 @@ import com.felhr.usbserial.UsbSerialInterface;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
+import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard;
+package org.josejuansanchez.nanoplayboard.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import org.josejuansanchez.nanoplayboard.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard;
+package org.josejuansanchez.nanoplayboard.activities;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,27 +11,23 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import org.josejuansanchez.nanoplayboard.model.Buzzer;
-import org.josejuansanchez.nanoplayboard.service.UsbService;
+import org.josejuansanchez.nanoplayboard.R;
+import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
+import org.josejuansanchez.nanoplayboard.services.UsbService;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
+import tr.xip.markview.MarkView;
+
 // This code is based on the example available in the UsbSerial repository:
 // https://github.com/felHR85/UsbSerial
 
-public class BuzzerActivity extends AppCompatActivity {
+public class LDRActivity extends AppCompatActivity {
 
-    public static final String TAG = BuzzerActivity.class.getSimpleName();
-    private UsbService mUsbService;
-    private MyHandler mHandler;
-    private SeekBar mSeekbar;
+    public static final String TAG = LDRActivity.class.getSimpleName();
 
     /*
      * Notifications from UsbService will be received here.
@@ -59,6 +55,10 @@ public class BuzzerActivity extends AppCompatActivity {
         }
     };
 
+    private UsbService mUsbService;
+    private MyHandler mHandler;
+    private MarkView mMarkViewLdr;
+
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -75,39 +75,9 @@ public class BuzzerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_buzzer);
-        mSeekbar = (SeekBar) findViewById(R.id.seekbar_notes);
-        loadListeners();
-    }
-
-    private void loadListeners() {
-        mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                sendJsonMessage(progress, 125);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-    }
-
-    private void sendJsonMessage(int frequency, int duration) {
-        // if UsbService was correctly binded, Send data
-        if (mUsbService != null) {
-            Buzzer message = new Buzzer(frequency, duration);
-            Gson gson = new Gson();
-            mUsbService.write(gson.toJson(message).getBytes());
-            mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
-        }
+        setContentView(R.layout.activity_ldr);
+        mHandler = new MyHandler(this);
+        mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
     }
 
     @Override
@@ -154,9 +124,9 @@ public class BuzzerActivity extends AppCompatActivity {
      * This handler will be passed to UsbService. Data received from serial port is displayed through this handler
      */
     private static class MyHandler extends Handler {
-        private final WeakReference<RGBActivity> mActivity;
+        private final WeakReference<LDRActivity> mActivity;
 
-        public MyHandler(RGBActivity activity) {
+        public MyHandler(LDRActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
@@ -165,8 +135,8 @@ public class BuzzerActivity extends AppCompatActivity {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     if (msg.obj == null) return;
-                    Log.d(TAG, "Response: " + msg.obj.toString());
-                    //NanoPlayBoardMessage response = (NanoPlayBoardMessage) msg.obj;
+                    NanoPlayBoardMessage message = (NanoPlayBoardMessage) msg.obj;
+                    mActivity.get().mMarkViewLdr.setMark(message.getLdr());
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();
@@ -177,5 +147,4 @@ public class BuzzerActivity extends AppCompatActivity {
             }
         }
     }
-
 }

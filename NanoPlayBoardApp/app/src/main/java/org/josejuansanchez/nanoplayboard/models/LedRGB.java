@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard.model;
+package org.josejuansanchez.nanoplayboard.models;
 
 import android.graphics.Color;
 

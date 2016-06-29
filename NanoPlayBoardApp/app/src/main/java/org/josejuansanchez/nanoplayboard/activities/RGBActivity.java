@@ -1,4 +1,4 @@
-package org.josejuansanchez.nanoplayboard;
+package org.josejuansanchez.nanoplayboard.activities;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -21,9 +21,10 @@ import android.widget.Toast;
 import com.christophesmet.android.views.colorpicker.ColorPickerView;
 import com.google.gson.Gson;
 
-import org.josejuansanchez.nanoplayboard.model.LedRGB;
-import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
-import org.josejuansanchez.nanoplayboard.service.UsbService;
+import org.josejuansanchez.nanoplayboard.R;
+import org.josejuansanchez.nanoplayboard.models.LedRGB;
+import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
+import org.josejuansanchez.nanoplayboard.services.UsbService;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
