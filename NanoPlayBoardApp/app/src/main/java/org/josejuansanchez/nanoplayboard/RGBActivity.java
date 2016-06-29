@@ -103,25 +103,26 @@ public class RGBActivity extends AppCompatActivity {
             @Override
             public void onColorSelected(int color) {
                 updateSelectedColor(color);
-
-                // TODO: Send data
-                // A flow control is needed in order to avoid
-                // a serial buffer overflow in the Arduino side
+                sendJsonMessage(color);
             }
 
             @Override
             public void onStopTrackingTouch(int color) {
                 updateSelectedColor(color);
-
-                // if UsbService was correctly binded, Send data
-                if (mUsbService != null) {
-                    LedRGB message = new LedRGB(color);
-                    Gson gson = new Gson();
-                    mUsbService.write(gson.toJson(message).getBytes());
-                    Log.d(TAG, "JSON: " + gson.toJson(message));
-                }
+                sendJsonMessage(color);
             }
         });
+    }
+
+    private void sendJsonMessage(int color) {
+        // if UsbService was correctly binded, Send data
+        if (mUsbService != null) {
+            LedRGB message = new LedRGB(color);
+            Gson gson = new Gson();
+            mUsbService.write(gson.toJson(message).getBytes());
+            mUsbService.write("\n".getBytes());
+            Log.d(TAG, "JSON: " + gson.toJson(message));
+        }
     }
 
     private void updateSelectedColor(int color) {
