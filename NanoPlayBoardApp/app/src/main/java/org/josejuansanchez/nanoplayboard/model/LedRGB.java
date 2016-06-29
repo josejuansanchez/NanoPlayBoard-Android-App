@@ -1,5 +1,7 @@
 package org.josejuansanchez.nanoplayboard.model;
 
+import android.graphics.Color;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +11,18 @@ public class LedRGB implements Serializable {
     private int r;
     private int g;
     private int b;
+
+    public LedRGB(int r, int g, int b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+    }
+
+    public LedRGB(int color) {
+        this.r = Color.red(color);
+        this.g = Color.green(color);
+        this.b = Color.blue(color);
+    }
 
     public int getR() {
         return r;

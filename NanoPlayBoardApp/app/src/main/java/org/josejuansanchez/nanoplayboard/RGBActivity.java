@@ -101,29 +101,33 @@ public class RGBActivity extends AppCompatActivity {
         mColorPickerView.setColorListener(new ColorPickerView.ColorListener() {
             @Override
             public void onColorSelected(int color) {
+                updateSelectedColor(color);
 
+                // TODO: Send data
+                // A flow control is needed in order to avoid
+                // a serial buffer overflow in the Arduino side
             }
 
             @Override
             public void onStopTrackingTouch(int color) {
-                LedRGB message = new LedRGB();
-                message.setR(Color.red(color));
-                message.setG(Color.green(color));
-                message.setB(Color.blue(color));
+                updateSelectedColor(color);
 
                 // if UsbService was correctly binded, Send data
                 if (mUsbService != null) {
+                    LedRGB message = new LedRGB(color);
                     Gson gson = new Gson();
-                    Log.d(TAG, "JSON: " + gson.toJson(message));
                     mUsbService.write(gson.toJson(message).getBytes());
+                    Log.d(TAG, "JSON: " + gson.toJson(message));
                 }
-
-                mColorSectedView.setBackgroundColor(color);
-                mColorSelectedRed.setText(Html.fromHtml("R: <b>" + message.getR() + "</b>"));
-                mColorSelectedGreen.setText(Html.fromHtml("G: <b>" + message.getG() + "</b>"));
-                mColorSelectedBlue.setText(Html.fromHtml("B: <b>" + message.getB() + "</b>"));
             }
         });
+    }
+
+    private void updateSelectedColor(int color) {
+        mColorSectedView.setBackgroundColor(color);
+        mColorSelectedRed.setText(Html.fromHtml("R: <b>" + Color.red(color) + "</b>"));
+        mColorSelectedGreen.setText(Html.fromHtml("G: <b>" + Color.green(color) + "</b>"));
+        mColorSelectedBlue.setText(Html.fromHtml("B: <b>" + Color.blue(color) + "</b>"));
     }
 
     @Override
