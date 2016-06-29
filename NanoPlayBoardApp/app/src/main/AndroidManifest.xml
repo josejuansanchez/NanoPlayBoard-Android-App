@@ -9,10 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".PotentiometerActivity">
-        </activity>
-
-        <activity android:name=".LDRActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,12 +17,16 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".PotentiometerActivity" />
+        <activity android:name=".LDRActivity" />
         <activity android:name=".RGBActivity" />
 
         <service
-            android:name=".UsbService"
+            android:name=".service.UsbService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+
     </application>
 
 </manifest>

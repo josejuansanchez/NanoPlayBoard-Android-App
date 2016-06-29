@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
+import org.josejuansanchez.nanoplayboard.service.UsbService;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
@@ -134,7 +135,9 @@ public class PotentiometerActivity extends AppCompatActivity {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     if (msg.obj == null) return;
                     NanoPlayBoardMessage message = (NanoPlayBoardMessage) msg.obj;
-                    mActivity.get().mMarkViewPotentiometer.setMark(message.getPotentiometer());
+
+                    if (mActivity.get() != null)
+                        mActivity.get().mMarkViewPotentiometer.setMark(message.getPotentiometer());
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();

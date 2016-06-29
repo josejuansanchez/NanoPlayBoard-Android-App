@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
+import org.josejuansanchez.nanoplayboard.service.UsbService;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;

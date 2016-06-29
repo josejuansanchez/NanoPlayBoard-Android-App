@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.model.LedRGB;
 import org.josejuansanchez.nanoplayboard.model.NanoPlayBoardMessage;
+import org.josejuansanchez.nanoplayboard.service.UsbService;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
