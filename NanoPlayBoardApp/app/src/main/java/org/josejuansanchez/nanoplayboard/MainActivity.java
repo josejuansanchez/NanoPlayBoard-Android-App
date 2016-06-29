@@ -16,7 +16,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView mListview;
-    private String[] mValues = new String[] { "Potentiometer", "LDR", "RGB LED" };
+    private String[] mValues = new String[] { "Potentiometer", "LDR", "RGB LED", "Buzzer" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2:
                         intent = new Intent(MainActivity.this, RGBActivity.class);
+                        break;
+                    case 3:
+                        intent = new Intent(MainActivity.this, BuzzerActivity.class);
                         break;
                 }
                 startActivity(intent);
