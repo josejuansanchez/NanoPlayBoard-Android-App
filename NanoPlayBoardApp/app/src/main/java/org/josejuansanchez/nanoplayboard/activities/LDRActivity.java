@@ -11,7 +11,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
@@ -58,6 +63,7 @@ public class LDRActivity extends AppCompatActivity {
     private UsbService mUsbService;
     private MyHandler mHandler;
     private MarkView mMarkViewLdr;
+    private Button mButtonStart;
 
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
@@ -78,6 +84,18 @@ public class LDRActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ldr);
         mHandler = new MyHandler(this);
         mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
+        mButtonStart = (Button) findViewById(R.id.button_start);
+        loadListeners();
+    }
+
+    private void loadListeners() {
+        mButtonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Send to Arduino the sketch id for this Activity
+                sendInitialJsonMessage(1);
+            }
+        });
     }
 
     @Override
@@ -145,6 +163,17 @@ public class LDRActivity extends AppCompatActivity {
                     Toast.makeText(mActivity.get(), "DSR_CHANGE",Toast.LENGTH_LONG).show();
                     break;
             }
+        }
+    }
+
+    private void sendInitialJsonMessage(int sketchId) {
+        // if UsbService was correctly binded, Send data
+        if (mUsbService != null) {
+            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
+            Gson gson = new Gson();
+            mUsbService.write(gson.toJson(message).getBytes());
+            mUsbService.write("\n".getBytes());
+            Log.d(TAG, "JSON: " + gson.toJson(message));
         }
     }
 }

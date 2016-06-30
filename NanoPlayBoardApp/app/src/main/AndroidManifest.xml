@@ -24,7 +24,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activities.BuzzerActivity"></activity>
+        <activity android:name=".activities.BuzzerActivity" />
+        <activity android:name=".activities.LedMatrixActivity"></activity>
     </application>
 
 </manifest>

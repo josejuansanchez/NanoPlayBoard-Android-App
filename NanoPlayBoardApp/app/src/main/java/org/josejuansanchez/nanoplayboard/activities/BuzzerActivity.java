@@ -12,6 +12,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.models.Buzzer;
+import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
 import java.lang.ref.WeakReference;
@@ -33,6 +36,7 @@ public class BuzzerActivity extends AppCompatActivity {
     private UsbService mUsbService;
     private MyHandler mHandler;
     private SeekBar mSeekbar;
+    private Button mButtonStart;
 
     /*
      * Notifications from UsbService will be received here.
@@ -78,6 +82,7 @@ public class BuzzerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzer);
         mSeekbar = (SeekBar) findViewById(R.id.seekbar_notes);
+        mButtonStart = (Button) findViewById(R.id.button_start);
         loadListeners();
     }
 
@@ -96,6 +101,14 @@ public class BuzzerActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+        mButtonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Send to Arduino the sketch id for this Activity
+                sendInitialJsonMessage(3);
             }
         });
     }
@@ -155,9 +168,9 @@ public class BuzzerActivity extends AppCompatActivity {
      * This handler will be passed to UsbService. Data received from serial port is displayed through this handler
      */
     private static class MyHandler extends Handler {
-        private final WeakReference<RGBActivity> mActivity;
+        private final WeakReference<BuzzerActivity> mActivity;
 
-        public MyHandler(RGBActivity activity) {
+        public MyHandler(BuzzerActivity activity) {
             mActivity = new WeakReference<>(activity);
         }
 
@@ -179,4 +192,14 @@ public class BuzzerActivity extends AppCompatActivity {
         }
     }
 
+    private void sendInitialJsonMessage(int sketchId) {
+        // if UsbService was correctly binded, Send data
+        if (mUsbService != null) {
+            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
+            Gson gson = new Gson();
+            mUsbService.write(gson.toJson(message).getBytes());
+            mUsbService.write("\n".getBytes());
+            Log.d(TAG, "JSON: " + gson.toJson(message));
+        }
+    }
 }

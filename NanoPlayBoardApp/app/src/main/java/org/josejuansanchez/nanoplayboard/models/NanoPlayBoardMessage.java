@@ -9,6 +9,11 @@ public class NanoPlayBoardMessage implements Serializable {
     private int potentiometer;
     private int ldr;
     private String error;
+    private int sketchId;
+
+    public NanoPlayBoardMessage(int sketchId) {
+        this.sketchId = sketchId;
+    }
 
     public int getPotentiometer() {
         return potentiometer;
@@ -32,5 +37,13 @@ public class NanoPlayBoardMessage implements Serializable {
 
     public void setError(String error) {
         this.error = error;
+    }
+
+    public int getSketchId() {
+        return sketchId;
+    }
+
+    public void setSketchId(int sketchId) {
+        this.sketchId = sketchId;
     }
 }

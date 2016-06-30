@@ -22,4 +22,12 @@
         app:mv_strokeWidth="12dp"
         app:mv_textSize="48sp" />
 
+    <Button
+        android:id="@+id/button_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="18dp"
+        android:text="Start"/>
+
 </RelativeLayout>
