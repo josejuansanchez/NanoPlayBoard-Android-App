@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.models.Buzzer;
-import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
 import java.lang.ref.WeakReference;
@@ -108,7 +107,7 @@ public class BuzzerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send to Arduino the sketch id for this Activity
-                sendInitialJsonMessage(3);
+                sendJsonMessage(0, 0);
             }
         });
     }
@@ -116,7 +115,7 @@ public class BuzzerActivity extends AppCompatActivity {
     private void sendJsonMessage(int frequency, int duration) {
         // if UsbService was correctly binded, Send data
         if (mUsbService != null) {
-            Buzzer message = new Buzzer(frequency, duration);
+            Buzzer message = new Buzzer(3, frequency, duration);
             Gson gson = new Gson();
             mUsbService.write(gson.toJson(message).getBytes());
             mUsbService.write("\n".getBytes());
@@ -189,17 +188,6 @@ public class BuzzerActivity extends AppCompatActivity {
                     Toast.makeText(mActivity.get(), "DSR_CHANGE",Toast.LENGTH_LONG).show();
                     break;
             }
-        }
-    }
-
-    private void sendInitialJsonMessage(int sketchId) {
-        // if UsbService was correctly binded, Send data
-        if (mUsbService != null) {
-            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
-            Gson gson = new Gson();
-            mUsbService.write(gson.toJson(message).getBytes());
-            mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
         }
     }
 }

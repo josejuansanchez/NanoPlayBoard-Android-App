@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.models.LedMatrix;
-import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
 import java.lang.ref.WeakReference;
@@ -104,7 +103,7 @@ public class LedMatrixActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send to Arduino the sketch id for this Activity
-                sendInitialJsonMessage(4);
+                sendJsonMessage("*");
             }
         });
     }
@@ -112,7 +111,7 @@ public class LedMatrixActivity extends AppCompatActivity {
     private void sendJsonMessage(String text) {
         // if UsbService was correctly binded, Send data
         if (mUsbService != null) {
-            LedMatrix message = new LedMatrix(text);
+            LedMatrix message = new LedMatrix(4, text);
             Gson gson = new Gson();
             mUsbService.write(gson.toJson(message).getBytes());
             mUsbService.write("\n".getBytes());
@@ -184,17 +183,6 @@ public class LedMatrixActivity extends AppCompatActivity {
                     Toast.makeText(mActivity.get(), "DSR_CHANGE",Toast.LENGTH_LONG).show();
                     break;
             }
-        }
-    }
-
-    private void sendInitialJsonMessage(int sketchId) {
-        // if UsbService was correctly binded, Send data
-        if (mUsbService != null) {
-            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
-            Gson gson = new Gson();
-            mUsbService.write(gson.toJson(message).getBytes());
-            mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
         }
     }
 }

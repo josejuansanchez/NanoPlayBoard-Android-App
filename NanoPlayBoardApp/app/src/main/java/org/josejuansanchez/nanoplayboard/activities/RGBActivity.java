@@ -130,7 +130,7 @@ public class RGBActivity extends AppCompatActivity {
     private void sendJsonMessage(int color) {
         // if UsbService was correctly binded, Send data
         if (mUsbService != null) {
-            LedRGB message = new LedRGB(color);
+            LedRGB message = new LedRGB(2, color);
             Gson gson = new Gson();
             mUsbService.write(gson.toJson(message).getBytes());
             mUsbService.write("\n".getBytes());

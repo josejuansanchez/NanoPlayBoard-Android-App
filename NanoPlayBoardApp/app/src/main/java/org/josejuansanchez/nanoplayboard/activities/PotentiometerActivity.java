@@ -93,9 +93,20 @@ public class PotentiometerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send to Arduino the sketch id for this Activity
-                sendInitialJsonMessage(0);
+                sendJsonMessage(0);
             }
         });
+    }
+
+    private void sendJsonMessage(int sketchId) {
+        // if UsbService was correctly binded, Send data
+        if (mUsbService != null) {
+            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
+            Gson gson = new Gson();
+            mUsbService.write(gson.toJson(message).getBytes());
+            mUsbService.write("\n".getBytes());
+            Log.d(TAG, "JSON: " + gson.toJson(message));
+        }
     }
 
     @Override
@@ -165,17 +176,6 @@ public class PotentiometerActivity extends AppCompatActivity {
                     Toast.makeText(mActivity.get(), "DSR_CHANGE",Toast.LENGTH_LONG).show();
                     break;
             }
-        }
-    }
-
-    private void sendInitialJsonMessage(int sketchId) {
-        // if UsbService was correctly binded, Send data
-        if (mUsbService != null) {
-            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
-            Gson gson = new Gson();
-            mUsbService.write(gson.toJson(message).getBytes());
-            mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
         }
     }
 }
