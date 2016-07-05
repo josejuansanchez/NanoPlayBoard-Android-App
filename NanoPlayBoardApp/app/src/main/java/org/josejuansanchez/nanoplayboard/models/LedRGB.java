@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by josejuansanchez on 25/6/16.
  */
-public class LedRGB implements Serializable {
+public class LedRGB extends NanoPlayBoardMessage implements Serializable {
     private int r;
     private int g;
     private int b;
@@ -19,6 +19,13 @@ public class LedRGB implements Serializable {
     }
 
     public LedRGB(int color) {
+        this.r = Color.red(color);
+        this.g = Color.green(color);
+        this.b = Color.blue(color);
+    }
+
+    public LedRGB(int sketchId, int color) {
+        this.setSketchId(sketchId);
         this.r = Color.red(color);
         this.g = Color.green(color);
         this.b = Color.blue(color);

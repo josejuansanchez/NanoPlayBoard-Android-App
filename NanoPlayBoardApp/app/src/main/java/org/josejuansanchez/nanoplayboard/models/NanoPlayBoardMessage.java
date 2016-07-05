@@ -11,6 +11,8 @@ public class NanoPlayBoardMessage implements Serializable {
     private String error;
     private int sketchId;
 
+    public NanoPlayBoardMessage() {};
+
     public NanoPlayBoardMessage(int sketchId) {
         this.sketchId = sketchId;
     }
