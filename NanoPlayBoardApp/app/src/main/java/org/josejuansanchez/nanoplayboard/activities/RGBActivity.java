@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,8 +69,6 @@ public class RGBActivity extends AppCompatActivity {
     private TextView mColorSelectedRed;
     private TextView mColorSelectedGreen;
     private TextView mColorSelectedBlue;
-    private Button mButtonStart;
-
 
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
@@ -97,7 +94,6 @@ public class RGBActivity extends AppCompatActivity {
         mColorSelectedRed = (TextView) findViewById(R.id.colorselected_red);
         mColorSelectedGreen = (TextView) findViewById(R.id.colorselected_green);
         mColorSelectedBlue = (TextView) findViewById(R.id.colorselected_blue);
-        mButtonStart = (Button) findViewById(R.id.button_start);
         mColorPickerView.setDrawDebug(false);
 
         loadListeners();
@@ -115,14 +111,6 @@ public class RGBActivity extends AppCompatActivity {
             public void onStopTrackingTouch(int color) {
                 updateSelectedColor(color);
                 sendJsonMessage(color);
-            }
-        });
-
-        mButtonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Send to Arduino the sketch id for this Activity
-                sendInitialJsonMessage(2);
             }
         });
     }

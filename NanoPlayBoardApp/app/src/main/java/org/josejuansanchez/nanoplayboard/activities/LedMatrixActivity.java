@@ -36,7 +36,6 @@ public class LedMatrixActivity extends AppCompatActivity {
     private MyHandler mHandler;
     private EditText mText;
     private Button mButtonSend;
-    private Button mButtonStart;
 
     /*
      * Notifications from UsbService will be received here.
@@ -84,7 +83,6 @@ public class LedMatrixActivity extends AppCompatActivity {
         mHandler = new MyHandler(this);
         mText = (EditText) findViewById(R.id.edittext_ledmatrix);
         mButtonSend = (Button) findViewById(R.id.button_send_ledmatrix);
-        mButtonStart = (Button) findViewById(R.id.button_start);
         loadListeners();
     }
 
@@ -96,14 +94,6 @@ public class LedMatrixActivity extends AppCompatActivity {
                 if (!text.trim().equals("")) {
                     sendJsonMessage(text);
                 }
-            }
-        });
-
-        mButtonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Send to Arduino the sketch id for this Activity
-                sendJsonMessage("*");
             }
         });
     }

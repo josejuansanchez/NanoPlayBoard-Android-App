@@ -48,12 +48,4 @@
         android:layout_toLeftOf="@id/colorselected_green"
         android:layout_alignParentBottom="true"/>
 
-    <Button
-        android:id="@+id/button_start"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:padding="18dp"
-        android:text="Start"/>
-
 </RelativeLayout>

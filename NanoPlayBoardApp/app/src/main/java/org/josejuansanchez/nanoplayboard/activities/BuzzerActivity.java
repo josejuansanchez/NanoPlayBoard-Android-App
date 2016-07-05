@@ -12,8 +12,6 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -35,7 +33,6 @@ public class BuzzerActivity extends AppCompatActivity {
     private UsbService mUsbService;
     private MyHandler mHandler;
     private SeekBar mSeekbar;
-    private Button mButtonStart;
 
     /*
      * Notifications from UsbService will be received here.
@@ -81,7 +78,6 @@ public class BuzzerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzer);
         mSeekbar = (SeekBar) findViewById(R.id.seekbar_notes);
-        mButtonStart = (Button) findViewById(R.id.button_start);
         loadListeners();
     }
 
@@ -100,14 +96,6 @@ public class BuzzerActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-            }
-        });
-
-        mButtonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Send to Arduino the sketch id for this Activity
-                sendJsonMessage(0, 0);
             }
         });
     }
