@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView mListview;
     private String[] mValues = new String[] {
-            "Potentiometer", "LDR", "RGB LED", "Buzzer", "Led Matrix" };
+            "Potentiometer", "LDR", "RGB LED", "Buzzer", "Led Matrix", "Led Matrix Pattern" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 4:
                         intent = new Intent(MainActivity.this, LedMatrixActivity.class);
+                        break;
+                    case 5:
+                        intent = new Intent(MainActivity.this, LedMatrixPatternActivity.class);
                         break;
                 }
                 startActivity(intent);
