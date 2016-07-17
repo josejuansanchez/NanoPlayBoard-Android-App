@@ -11,15 +11,16 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -36,8 +37,9 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
     public static final String TAG = LedMatrixActivity.class.getSimpleName();
     private UsbService mUsbService;
     private MyHandler mHandler;
-    private EditText mText;
-    private Button mButtonSend;
+    private TextView mPatternSelectedDec;
+    private TextView mPatternSelectedHex;
+    private Button mButtonClear;
     private GridView mGridView;
     private final int MATRIX_ROWS = 7;
     private final int MATRIX_COLS = 5;
@@ -86,6 +88,8 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_led_matrix_pattern);
         mHandler = new MyHandler(this);
+        mPatternSelectedDec = (TextView) findViewById(R.id.pattern_selected_decimal);
+        mPatternSelectedHex = (TextView) findViewById(R.id.pattern_selected_hexadecimal);
         mGridView = (GridView) findViewById(R.id.gridview);
         mGridView.setAdapter(new ImageAdapter(this));
         loadListeners();
@@ -108,6 +112,7 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
                 boolean matrix[][] = createMatrixFromAdapter();
                 int columns[] = convertColumnsMatrixToInt(matrix);
                 sendJsonMessage(columns);
+                updateTextViewPattern(columns);
             }
         });
     }
@@ -167,6 +172,25 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
             mUsbService.write("\n".getBytes());
             Log.d(TAG, "JSON: " + gson.toJson(message));
         }
+    }
+
+    private void updateTextViewPattern(int[] pattern) {
+        String DecText = patternToString(pattern, 10);
+        String HexText = patternToString(pattern, 16);
+        mPatternSelectedDec.setText(Html.fromHtml("Dec: <b>" + DecText + "</b>"));
+        mPatternSelectedHex.setText(Html.fromHtml("Hex: <b>" + HexText + "</b>"));
+    }
+
+    private String patternToString(int pattern[], int base) {
+        String text = "";
+        int length = pattern.length;
+        for(int i = 0; i < length; i++) {
+            text += Integer.toString(pattern[i], base);
+            if (i != length - 1) {
+                text += ", ";
+            }
+        }
+        return text;
     }
 
     @Override
@@ -283,23 +307,40 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
         }
 
         private Integer[] mThumbIds = {
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
-                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
+                R.drawable.led_off,
                 R.drawable.led_off
         };
     }
