@@ -1,11 +1,9 @@
 package org.josejuansanchez.nanoplayboard.models;
 
-import java.io.Serializable;
-
 /**
  * Created by josejuansanchez on 24/6/16.
  */
-public class NanoPlayBoardMessage implements Serializable {
+public class NanoPlayBoardMessage {
     private int potentiometer;
     private int ldr;
     private String error;

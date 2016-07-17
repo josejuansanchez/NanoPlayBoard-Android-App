@@ -2,12 +2,11 @@ package org.josejuansanchez.nanoplayboard.models;
 
 import android.graphics.Color;
 
-import java.io.Serializable;
-
 /**
  * Created by josejuansanchez on 25/6/16.
  */
-public class LedRGB extends NanoPlayBoardMessage implements Serializable {
+public class LedRGB {
+    private int sketchId;
     private int r;
     private int g;
     private int b;
@@ -25,7 +24,7 @@ public class LedRGB extends NanoPlayBoardMessage implements Serializable {
     }
 
     public LedRGB(int sketchId, int color) {
-        this.setSketchId(sketchId);
+        this.sketchId = sketchId;
         this.r = Color.red(color);
         this.g = Color.green(color);
         this.b = Color.blue(color);
