@@ -11,8 +11,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -33,6 +35,7 @@ public class BuzzerActivity extends AppCompatActivity {
     private UsbService mUsbService;
     private MyHandler mHandler;
     private SeekBar mSeekbar;
+    private TextView mFrequencySelected;
 
     /*
      * Notifications from UsbService will be received here.
@@ -77,6 +80,7 @@ public class BuzzerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzer);
+        mFrequencySelected = (TextView) findViewById(R.id.frequency_selected);
         mSeekbar = (SeekBar) findViewById(R.id.seekbar_notes);
         loadListeners();
     }
@@ -86,6 +90,7 @@ public class BuzzerActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 sendJsonMessage(progress, 125);
+                updateTextViewFrequencySelected(progress);
             }
 
             @Override
@@ -109,6 +114,10 @@ public class BuzzerActivity extends AppCompatActivity {
             mUsbService.write("\n".getBytes());
             Log.d(TAG, "JSON: " + gson.toJson(message));
         }
+    }
+
+    private void updateTextViewFrequencySelected(int frequency) {
+        mFrequencySelected.setText(Html.fromHtml("Frequency: <b>" + Integer.toString(frequency) + "</b>"));
     }
 
     @Override
