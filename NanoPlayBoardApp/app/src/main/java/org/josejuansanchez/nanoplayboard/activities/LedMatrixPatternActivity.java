@@ -39,6 +39,8 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
     private EditText mText;
     private Button mButtonSend;
     private GridView mGridView;
+    private final int MATRIX_ROWS = 7;
+    private final int MATRIX_COLS = 5;
 
     /*
      * Notifications from UsbService will be received here.
@@ -93,23 +95,70 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                ImageView imageView = (ImageView) v;
 
-                if (imageView.getTag().toString().equals("off")) {
-                    imageView.setImageResource(R.drawable.on);
-                    imageView.setTag("on");
+                // Update the thumbnail of the item (is on or off?)
+                int thumbId = ((ImageAdapter)mGridView.getAdapter()).getItemThumbId(position);
+                if (thumbId == R.drawable.led_off) {
+                    ((ImageAdapter)mGridView.getAdapter()).setItemThumbId(position, R.drawable.led_on);
                 } else {
-                    imageView.setImageResource(R.drawable.off);
-                    imageView.setTag("off");
+                    ((ImageAdapter)mGridView.getAdapter()).setItemThumbId(position, R.drawable.led_off);
                 }
 
-                // TODO: Send JSON message
-                //sendJsonMessage
+                // Calculate the values of the matrix and send the JSON message
+                boolean matrix[][] = createMatrixFromAdapter();
+                int columns[] = convertColumnsMatrixToInt(matrix);
+                sendJsonMessage(columns);
             }
         });
     }
 
-    private void sendJsonMessage(String pattern) {
+    // Create a matrix of booleans from the adapter used for the GridView
+    private boolean [][] createMatrixFromAdapter() {
+        ImageAdapter adapter = ((ImageAdapter) mGridView.getAdapter());
+        boolean matrix[][] = new boolean[MATRIX_ROWS][MATRIX_COLS];
+        for(int i = 0; i < MATRIX_ROWS; i++) {
+            for(int j = 0; j < MATRIX_COLS; j++ ) {
+                if (adapter.getItemThumbId((i * MATRIX_COLS) + j) == R.drawable.led_on) {
+                    matrix[i][j] = true;
+                } else {
+                    matrix[i][j] = false;
+                }
+            }
+        }
+        return matrix;
+    }
+
+    // Convert each column of the matrix into a int value
+    private int [] convertColumnsMatrixToInt(boolean matrix[][]) {
+        int columnInt[] = new int[MATRIX_COLS];
+        for(int j = 0; j < MATRIX_COLS; j++) {
+            boolean columnBool[] = copyColumnMatrix(matrix, j);
+            columnInt[j] = convertArrayOfBooleansToInt(columnBool);
+        }
+        return columnInt;
+    }
+
+    // Note that is necessary to add manually the last element of the array
+    // because the led matrix has 7 rows but we need an array of 8 bits
+    private boolean [] copyColumnMatrix(boolean matrix[][], int colIndex) {
+        boolean column[] = new boolean[MATRIX_ROWS + 1];
+        for(int i = 0; i < MATRIX_ROWS; i++) {
+            column[i] = matrix[i][colIndex];
+        }
+        column[MATRIX_ROWS] = false;
+        return column;
+    }
+
+    private int convertArrayOfBooleansToInt(boolean a[]) {
+        int n = 0;
+        int length = a.length;
+        for (int i = 0; i < length; i++) {
+            n = (n << 1) + (a[i] ? 1 : 0);
+        }
+        return n;
+    }
+
+    private void sendJsonMessage(int pattern[]) {
         // if UsbService was correctly binded, Send data
         if (mUsbService != null) {
             LedMatrix message = new LedMatrix(5, pattern);
@@ -206,6 +255,15 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
             return 0;
         }
 
+        public void setItemThumbId(int position, int id) {
+            mThumbIds[position] = id;
+            notifyDataSetChanged();
+        }
+
+        public int getItemThumbId(int position) {
+            return mThumbIds[position];
+        }
+
         // create a new ImageView for each item referenced by the Adapter
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -221,30 +279,28 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
             }
 
             imageView.setImageResource(mThumbIds[position]);
-            imageView.setTag("off");
             return imageView;
         }
 
-        // references to our images
         private Integer[] mThumbIds = {
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off, R.drawable.off,
-                R.drawable.off
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off, R.drawable.led_off,
+                R.drawable.led_off
         };
     }
 }
