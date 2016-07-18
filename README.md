@@ -13,6 +13,15 @@ For more information about the board please visit us at:
 ![upperside][5]
 ![underside][6]
 
+## What do I need to use it?
+
+![What do I need to use it?][18]
+
+* Arduino Nano PlayBoard.
+* Arduino Nano + USB cable.
+* USB OTG cable.
+* Android device (version >= 4.1.x)
+
 ## Demo video
 
 *Coming soon...*
@@ -82,3 +91,4 @@ limitations under the License.
 [15]: https://github.com/google/gson
 [16]: https://github.com/xiprox/MarkView
 [17]: https://github.com/christophesmet/colorpicker
+[18]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/extras/_items.jpg
