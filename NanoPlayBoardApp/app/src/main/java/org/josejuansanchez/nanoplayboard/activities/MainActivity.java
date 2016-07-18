@@ -19,7 +19,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView mListview;
     private String[] mValues = new String[] {
-            "Potentiometer", "LDR", "RGB LED", "Buzzer", "Led Matrix", "Led Matrix Pattern" };
+            "Potentiometer",
+            "LDR",
+            "RGB LED",
+            "Buzzer",
+            "Led Matrix",
+            "Led Matrix Pattern",
+            "Led Matrix Voice"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
                     case 5:
                         intent = new Intent(MainActivity.this, LedMatrixPatternActivity.class);
                         break;
+                    case 6:
+                        intent = new Intent(MainActivity.this, LedMatrixVoiceActivity.class);
+                        break;
                 }
                 startActivity(intent);
             }
@@ -75,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
-        public BasicArrayAdapter(Context context, int textViewResourceId,
-                                 List<String> objects) {
+        public BasicArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
             super(context, textViewResourceId, objects);
             for (int i = 0; i < objects.size(); ++i) {
                 mIdMap.put(objects.get(i), i);

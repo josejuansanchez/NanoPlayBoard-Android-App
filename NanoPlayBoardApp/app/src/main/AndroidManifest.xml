@@ -26,7 +26,8 @@
 
         <activity android:name=".activities.BuzzerActivity" />
         <activity android:name=".activities.LedMatrixActivity" />
-        <activity android:name=".activities.LedMatrixPatternActivity"></activity>
+        <activity android:name=".activities.LedMatrixPatternActivity" />
+        <activity android:name=".activities.LedMatrixVoiceActivity"></activity>
     </application>
 
 </manifest>
