@@ -82,6 +82,7 @@ public class LDRActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ldr);
+        setTitle("LDR");
         mHandler = new MyHandler(this);
         mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
         mButtonStart = (Button) findViewById(R.id.button_start);

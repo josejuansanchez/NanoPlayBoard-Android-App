@@ -87,6 +87,7 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_led_matrix_pattern);
+        setTitle("Led Matrix");
         mHandler = new MyHandler(this);
         mPatternSelectedDec = (TextView) findViewById(R.id.pattern_selected_decimal);
         mPatternSelectedHex = (TextView) findViewById(R.id.pattern_selected_hexadecimal);

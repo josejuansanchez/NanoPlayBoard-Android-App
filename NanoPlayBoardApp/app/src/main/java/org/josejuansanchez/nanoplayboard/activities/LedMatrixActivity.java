@@ -80,6 +80,7 @@ public class LedMatrixActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_led_matrix);
+        setTitle("Led Matrix");
         mHandler = new MyHandler(this);
         mText = (EditText) findViewById(R.id.edittext_ledmatrix);
         mButtonSend = (Button) findViewById(R.id.button_send_ledmatrix);

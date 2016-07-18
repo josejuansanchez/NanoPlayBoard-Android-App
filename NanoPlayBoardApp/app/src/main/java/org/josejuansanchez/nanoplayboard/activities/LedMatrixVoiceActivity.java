@@ -80,6 +80,7 @@ public class LedMatrixVoiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_led_matrix_voice);
+        setTitle("Led Matrix");
         mButtonSpeak = (Button) findViewById(R.id.button_speak);
         mImageSpeak = (ImageView) findViewById(R.id.image_speak);
         mHandler = new MyHandler(this);

@@ -9,6 +9,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.josejuansanchez.nanoplayboard.activities.LedMatrixActivity">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/_ledmatrix"/>
+
     <EditText
         android:id="@+id/edittext_ledmatrix"
         android:layout_width="match_parent"
@@ -20,8 +27,8 @@
         android:id="@+id/button_send_ledmatrix"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edittext_ledmatrix"
-        android:padding="16dp"
+        android:layout_alignParentBottom="true"
+        android:padding="18dp"
         android:text="Send" />
 
 </RelativeLayout>

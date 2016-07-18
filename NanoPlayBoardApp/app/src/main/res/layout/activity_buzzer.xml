@@ -9,6 +9,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activities.BuzzerActivity">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/_buzzer"/>
+
     <SeekBar
         android:id="@+id/seekbar_notes"
         android:layout_width="match_parent"

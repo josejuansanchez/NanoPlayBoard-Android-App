@@ -87,6 +87,7 @@ public class RGBActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rgb);
+        setTitle("RGB LED");
 
         mHandler = new MyHandler(this);
         mColorPickerView = (ColorPickerView) findViewById(R.id.colorpicker);

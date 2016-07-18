@@ -82,6 +82,7 @@ public class PotentiometerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_potentiometer);
+        setTitle("Potentiometer");
         mHandler = new MyHandler(this);
         mMarkViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
         mButtonStart = (Button) findViewById(R.id.button_start);

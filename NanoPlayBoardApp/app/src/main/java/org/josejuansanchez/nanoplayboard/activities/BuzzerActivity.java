@@ -80,6 +80,7 @@ public class BuzzerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzer);
+        setTitle("Buzzer");
         mFrequencySelected = (TextView) findViewById(R.id.frequency_selected);
         mSeekbar = (SeekBar) findViewById(R.id.seekbar_notes);
         loadListeners();

@@ -8,6 +8,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/_potentiometer"/>
+
     <tr.xip.markview.MarkView
         android:id="@+id/mark_potentiometer"
         android:layout_width="256dp"
@@ -26,7 +33,7 @@
         android:id="@+id/button_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:padding="18dp"
         android:text="Start"/>
 
