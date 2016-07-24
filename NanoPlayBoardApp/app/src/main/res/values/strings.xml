@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NanoPlayBoard</string>
+    <string name="menu_bluetooth_connect">Connect by Bluetooth</string>
+    <string name="menu_bluetooth_disconnect">Disconnect from Bluetooth</string>
 </resources>

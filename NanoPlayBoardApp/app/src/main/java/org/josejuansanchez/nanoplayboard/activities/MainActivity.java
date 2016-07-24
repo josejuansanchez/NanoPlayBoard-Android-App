@@ -1,13 +1,18 @@
 package org.josejuansanchez.nanoplayboard.activities;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.josejuansanchez.nanoplayboard.R;
 
@@ -15,8 +20,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
+import app.akexorcist.bluetotohspp.library.DeviceList;
+
 public class MainActivity extends AppCompatActivity {
 
+    private Menu mMenu;
     private ListView mListview;
     private String[] mValues = new String[] {
             "Potentiometer",
@@ -43,10 +53,11 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, list);
         mListview.setAdapter(adapter);
 
-        loadListeners();
+        loadUIListeners();
+        loadBluetoothListeners();
     }
 
-    private void loadListeners() {
+    private void loadUIListeners() {
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -81,6 +92,46 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void loadBluetoothListeners() {
+        BluetoothSPP.getInstance().setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
+            public void onDeviceDisconnected() {
+                // TODO: Status : Not connect
+                mMenu.clear();
+                getMenuInflater().inflate(R.menu.menu_bluetooth_connection, mMenu);
+            }
+
+            public void onDeviceConnectionFailed() {
+                // TODO: Status : Connection failed
+            }
+
+            public void onDeviceConnected(String name, String address) {
+                // TODO: Status : Connected to " + name
+                mMenu.clear();
+                getMenuInflater().inflate(R.menu.menu_bluetooth_disconnection, mMenu);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!BluetoothSPP.getInstance().isBluetoothEnabled()) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
+        } else {
+            if(!BluetoothSPP.getInstance().isServiceAvailable()) {
+                BluetoothSPP.getInstance().setupService();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BluetoothSPP.getInstance().stopService();
+    }
+
     private class BasicArrayAdapter extends ArrayAdapter<String> {
 
         HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
@@ -104,4 +155,44 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.mMenu = menu;
+        getMenuInflater().inflate(R.menu.menu_bluetooth_connection, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id) {
+            case R.id.menu_bluetooth_connect:
+                BluetoothSPP.getInstance().setDeviceTarget(BluetoothState.DEVICE_OTHER);
+                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+                break;
+
+            case R.id.menu_bluetooth_disconnect:
+                if(BluetoothSPP.getInstance().getServiceState() == BluetoothState.STATE_CONNECTED) {
+                    BluetoothSPP.getInstance().disconnect();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+            if(resultCode == Activity.RESULT_OK)
+                BluetoothSPP.getInstance().connect(data);
+        } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
+            if(resultCode == Activity.RESULT_OK) {
+                BluetoothSPP.getInstance().setupService();
+            } else {
+                Toast.makeText(getApplicationContext()
+                        , "Bluetooth was not enabled."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 }

@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.josejuansanchez.nanoplayboard">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,16 +21,17 @@
         <activity android:name=".activities.PotentiometerActivity" />
         <activity android:name=".activities.LDRActivity" />
         <activity android:name=".activities.RGBActivity" />
+        <activity android:name=".activities.BuzzerActivity" />
+        <activity android:name=".activities.LedMatrixActivity" />
+        <activity android:name=".activities.LedMatrixPatternActivity" />
+        <activity android:name=".activities.LedMatrixVoiceActivity" />
+        <activity android:name=".activities.BluetoothActivity" />
 
         <service
             android:name=".services.UsbService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activities.BuzzerActivity" />
-        <activity android:name=".activities.LedMatrixActivity" />
-        <activity android:name=".activities.LedMatrixPatternActivity" />
-        <activity android:name=".activities.LedMatrixVoiceActivity"></activity>
     </application>
 
 </manifest>

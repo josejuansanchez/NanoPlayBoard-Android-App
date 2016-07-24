@@ -27,4 +27,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.github.xiprox.markview:library:1.+'
     compile 'com.github.josejuansanchez:colorpicker:c200c02'
+    compile 'com.github.josejuansanchez:Android-BluetoothSPPLibrary:9ae7df1'
 }
