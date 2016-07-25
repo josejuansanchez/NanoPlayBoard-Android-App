@@ -95,35 +95,26 @@ public class MainActivity extends AppCompatActivity {
     private void loadBluetoothListeners() {
         BluetoothSPP.getInstance().setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             public void onDeviceDisconnected() {
-                // TODO: Status : Not connect
                 mMenu.clear();
                 getMenuInflater().inflate(R.menu.menu_bluetooth_connection, mMenu);
+                Toast.makeText(MainActivity.this,
+                        "Bluetooth device disconnected",
+                        Toast.LENGTH_SHORT).show();
             }
 
             public void onDeviceConnectionFailed() {
-                // TODO: Status : Connection failed
+
             }
 
             public void onDeviceConnected(String name, String address) {
-                // TODO: Status : Connected to " + name
                 mMenu.clear();
                 getMenuInflater().inflate(R.menu.menu_bluetooth_disconnection, mMenu);
+                Toast.makeText(MainActivity.this,
+                        "Connected to " + name,
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!BluetoothSPP.getInstance().isBluetoothEnabled()) {
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
-        } else {
-            if(!BluetoothSPP.getInstance().isServiceAvailable()) {
-                BluetoothSPP.getInstance().setupService();
-            }
-        }
     }
 
     @Override
@@ -166,9 +157,17 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch(id) {
             case R.id.menu_bluetooth_connect:
-                BluetoothSPP.getInstance().setDeviceTarget(BluetoothState.DEVICE_OTHER);
-                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+                if (!BluetoothSPP.getInstance().isBluetoothEnabled()) {
+                    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
+                } else {
+                    if(!BluetoothSPP.getInstance().isServiceAvailable()) {
+                        BluetoothSPP.getInstance().setupService();
+                    }
+                    BluetoothSPP.getInstance().setDeviceTarget(BluetoothState.DEVICE_OTHER);
+                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                    startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+                }
                 break;
 
             case R.id.menu_bluetooth_disconnect:
@@ -187,6 +186,9 @@ public class MainActivity extends AppCompatActivity {
         } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
             if(resultCode == Activity.RESULT_OK) {
                 BluetoothSPP.getInstance().setupService();
+                BluetoothSPP.getInstance().setDeviceTarget(BluetoothState.DEVICE_OTHER);
+                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
             } else {
                 Toast.makeText(getApplicationContext()
                         , "Bluetooth was not enabled."
