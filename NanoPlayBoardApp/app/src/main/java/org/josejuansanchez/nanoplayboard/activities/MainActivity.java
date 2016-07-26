@@ -103,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onDeviceConnectionFailed() {
-
+                Toast.makeText(MainActivity.this,
+                        "Connection has failed",
+                        Toast.LENGTH_SHORT).show();
             }
 
             public void onDeviceConnected(String name, String address) {
