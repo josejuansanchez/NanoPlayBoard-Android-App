@@ -26,6 +26,8 @@ import org.josejuansanchez.nanoplayboard.services.UsbService;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+
 // This code is based on the example available in the UsbSerial repository:
 // https://github.com/felHR85/UsbSerial
 
@@ -100,13 +102,21 @@ public class LedMatrixActivity extends AppCompatActivity {
     }
 
     private void sendJsonMessage(String text) {
-        // if UsbService was correctly binded, Send data
+        // Create the Json message
+        LedMatrix message = new LedMatrix(4, text);
+        Gson gson = new Gson();
+        Log.d(TAG, "JSON: " + gson.toJson(message));
+
+        // if UsbService was correctly binded, send data
         if (mUsbService != null) {
-            LedMatrix message = new LedMatrix(4, text);
-            Gson gson = new Gson();
             mUsbService.write(gson.toJson(message).getBytes());
             mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
+        }
+
+        // if Bluetooth service is correctly connected, send data
+        if (BluetoothSPP.getInstance().isServiceAvailable()) {
+            BluetoothSPP.getInstance().send(gson.toJson(message).getBytes(), false);
+            BluetoothSPP.getInstance().send("\n".getBytes(), false);
         }
     }
 

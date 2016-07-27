@@ -32,6 +32,8 @@ import org.josejuansanchez.nanoplayboard.services.UsbService;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+
 public class LedMatrixPatternActivity extends AppCompatActivity {
 
     public static final String TAG = LedMatrixActivity.class.getSimpleName();
@@ -165,13 +167,21 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
     }
 
     private void sendJsonMessage(int pattern[]) {
-        // if UsbService was correctly binded, Send data
+        // Create the Json message
+        LedMatrix message = new LedMatrix(5, pattern);
+        Gson gson = new Gson();
+        Log.d(TAG, "JSON: " + gson.toJson(message));
+
+        // if UsbService was correctly binded, send data
         if (mUsbService != null) {
-            LedMatrix message = new LedMatrix(5, pattern);
-            Gson gson = new Gson();
             mUsbService.write(gson.toJson(message).getBytes());
             mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
+        }
+
+        // if Bluetooth service is correctly connected, send data
+        if (BluetoothSPP.getInstance().isServiceAvailable()) {
+            BluetoothSPP.getInstance().send(gson.toJson(message).getBytes(), false);
+            BluetoothSPP.getInstance().send("\n".getBytes(), false);
         }
     }
 

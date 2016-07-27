@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
@@ -25,6 +26,7 @@ import org.josejuansanchez.nanoplayboard.services.UsbService;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import tr.xip.markview.MarkView;
 
 // This code is based on the example available in the UsbSerial repository:
@@ -87,6 +89,7 @@ public class PotentiometerActivity extends AppCompatActivity {
         mMarkViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
         mButtonStart = (Button) findViewById(R.id.button_start);
         loadListeners();
+        loadBluetoothListeners();
     }
 
     private void loadListeners() {
@@ -99,14 +102,39 @@ public class PotentiometerActivity extends AppCompatActivity {
         });
     }
 
+    private void loadBluetoothListeners() {
+        BluetoothSPP.getInstance().setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+            public void onDataReceived(byte[] data, String message) {
+                Log.d(TAG, "Message: " + message);
+
+                try {
+                    Gson gson = new Gson();
+                    NanoPlayBoardMessage npbMessage = gson.fromJson(message, NanoPlayBoardMessage.class);
+                    mMarkViewPotentiometer.setMark(npbMessage.getPotentiometer());
+                } catch(JsonSyntaxException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+    }
+
     private void sendJsonMessage(int sketchId) {
-        // if UsbService was correctly binded, Send data
+        // Create the Json message
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
+        Gson gson = new Gson();
+        Log.d(TAG, "JSON: " + gson.toJson(message));
+
+        // if UsbService was correctly binded, send data
         if (mUsbService != null) {
-            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
-            Gson gson = new Gson();
             mUsbService.write(gson.toJson(message).getBytes());
             mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
+        }
+
+        // if Bluetooth service is correctly connected, send data
+        if (BluetoothSPP.getInstance().isServiceAvailable()) {
+            BluetoothSPP.getInstance().send(gson.toJson(message).getBytes(), false);
+            BluetoothSPP.getInstance().send("\n".getBytes(), false);
         }
     }
 

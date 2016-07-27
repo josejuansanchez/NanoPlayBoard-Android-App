@@ -29,6 +29,8 @@ import org.josejuansanchez.nanoplayboard.services.UsbService;
 import java.lang.ref.WeakReference;
 import java.util.Set;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+
 // This code is based on the example available in the UsbSerial repository:
 // https://github.com/felHR85/UsbSerial
 
@@ -117,13 +119,21 @@ public class RGBActivity extends AppCompatActivity {
     }
 
     private void sendJsonMessage(int color) {
-        // if UsbService was correctly binded, Send data
+        // Create the Json message
+        LedRGB message = new LedRGB(2, color);
+        Gson gson = new Gson();
+        Log.d(TAG, "JSON: " + gson.toJson(message));
+
+        // if UsbService was correctly binded, send data
         if (mUsbService != null) {
-            LedRGB message = new LedRGB(2, color);
-            Gson gson = new Gson();
             mUsbService.write(gson.toJson(message).getBytes());
             mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
+        }
+
+        // if Bluetooth service is correctly connected, send data
+        if (BluetoothSPP.getInstance().isServiceAvailable()) {
+            BluetoothSPP.getInstance().send(gson.toJson(message).getBytes(), false);
+            BluetoothSPP.getInstance().send("\n".getBytes(), false);
         }
     }
 
@@ -204,17 +214,6 @@ public class RGBActivity extends AppCompatActivity {
                     Toast.makeText(mActivity.get(), "DSR_CHANGE",Toast.LENGTH_LONG).show();
                     break;
             }
-        }
-    }
-
-    private void sendInitialJsonMessage(int sketchId) {
-        // if UsbService was correctly binded, Send data
-        if (mUsbService != null) {
-            NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
-            Gson gson = new Gson();
-            mUsbService.write(gson.toJson(message).getBytes());
-            mUsbService.write("\n".getBytes());
-            Log.d(TAG, "JSON: " + gson.toJson(message));
         }
     }
 }
