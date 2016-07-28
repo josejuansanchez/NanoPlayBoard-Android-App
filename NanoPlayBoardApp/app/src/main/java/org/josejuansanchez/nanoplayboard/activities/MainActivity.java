@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.josejuansanchez.nanoplayboard.R;
 
@@ -96,24 +96,17 @@ public class MainActivity extends AppCompatActivity {
         BluetoothSPP.getInstance().setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             public void onDeviceDisconnected() {
                 mMenu.clear();
-                getMenuInflater().inflate(R.menu.menu_bluetooth_connection, mMenu);
-                Toast.makeText(MainActivity.this,
-                        "Bluetooth device disconnected",
-                        Toast.LENGTH_SHORT).show();
+                Snackbar.make(mListview, R.string.bluetooth_disconnected, Snackbar.LENGTH_LONG).show();
             }
 
             public void onDeviceConnectionFailed() {
-                Toast.makeText(MainActivity.this,
-                        "Connection has failed",
-                        Toast.LENGTH_SHORT).show();
+                Snackbar.make(mListview, R.string.bluetooth_failed, Snackbar.LENGTH_LONG).show();
             }
 
             public void onDeviceConnected(String name, String address) {
                 mMenu.clear();
                 getMenuInflater().inflate(R.menu.menu_bluetooth_disconnection, mMenu);
-                Toast.makeText(MainActivity.this,
-                        "Connected to " + name,
-                        Toast.LENGTH_SHORT).show();
+                Snackbar.make(mListview, getString(R.string.bluetooth_connected) + name, Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -192,9 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DeviceList.class);
                 startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
             } else {
-                Toast.makeText(getApplicationContext()
-                        , "Bluetooth was not enabled."
-                        , Toast.LENGTH_SHORT).show();
+                Snackbar.make(mListview, R.string.bluetooth_not_enabled, Snackbar.LENGTH_LONG).show();
             }
         }
     }
