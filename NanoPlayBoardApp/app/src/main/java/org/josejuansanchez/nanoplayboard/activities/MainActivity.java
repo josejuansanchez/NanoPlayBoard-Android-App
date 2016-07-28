@@ -96,17 +96,17 @@ public class MainActivity extends AppCompatActivity {
         BluetoothSPP.getInstance().setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
             public void onDeviceDisconnected() {
                 mMenu.clear();
-                Snackbar.make(mListview, R.string.bluetooth_disconnected, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mListview, R.string.bluetooth_status_disconnected, Snackbar.LENGTH_LONG).show();
             }
 
             public void onDeviceConnectionFailed() {
-                Snackbar.make(mListview, R.string.bluetooth_failed, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mListview, R.string.bluetooth_status_failed, Snackbar.LENGTH_LONG).show();
             }
 
             public void onDeviceConnected(String name, String address) {
                 mMenu.clear();
                 getMenuInflater().inflate(R.menu.menu_bluetooth_disconnection, mMenu);
-                Snackbar.make(mListview, getString(R.string.bluetooth_connected) + name, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mListview, getString(R.string.bluetooth_status_connected) + name, Snackbar.LENGTH_LONG).show();
             }
         });
 
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DeviceList.class);
                 startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
             } else {
-                Snackbar.make(mListview, R.string.bluetooth_not_enabled, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(mListview, R.string.bluetooth_status_not_enabled, Snackbar.LENGTH_LONG).show();
             }
         }
     }
