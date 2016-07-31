@@ -15,11 +15,20 @@ For more information about the board please visit us at:
 
 ## What do I need to use it?
 
-![What do I need to use it?][18]
+### USB OTG version
+![USB OTG][usb_otg_version]
 
 * Arduino Nano PlayBoard.
 * Arduino Nano + USB cable.
 * USB OTG cable.
+* Android device (version >= 4.1.x)
+
+### Bluetooth version
+![Bluetooth][bluetooth_version]
+
+* Arduino Nano PlayBoard.
+* Arduino Nano.
+* Arduino compatible Bluetooth module (HC-05 or HC-06).
 * Android device (version >= 4.1.x)
 
 ## Demo video
@@ -55,6 +64,7 @@ For more information about the board please visit us at:
 * [Gson][15]
 * [MarkView][16]
 * [ColorPicker][17]
+* [Android-BluetoothSPPLibrary][18]
 
 ## License
 
@@ -91,4 +101,8 @@ limitations under the License.
 [15]: https://github.com/google/gson
 [16]: https://github.com/xiprox/MarkView
 [17]: https://github.com/christophesmet/colorpicker
-[18]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/extras/_items.jpg
+[18]: https://github.com/akexorcist/Android-BluetoothSPPLibrary
+
+[usb_otg_version]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/extras/_items.jpg
+[bluetooth_version]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/extras/bluetooth_beach.jpg
+
