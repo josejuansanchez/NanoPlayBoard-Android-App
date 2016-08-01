@@ -37,26 +37,7 @@ For more information about the board please visit us at:
 
 ## Screenshots
 
-### Potentiometer
-![Potentiometer][7]
-
-### LDR
-![LDR][8]
-
-### RGB LED
-![RGB LED][9]
-
-### Buzzer
-![Buzzer][10]
-
-### Led Matrix
-![Led Matrix][11]
-
-### Led Matrix Pattern
-![Led Matrix Pattern][12]
-
-### Led Matrix Voice
-![Led Matrix Voice][13]
+<img src="screenshots/potentiometer.png" height="450" alt="Potentiometer"/> <img src="screenshots/ldr.png" height="450" alt="LDR"/> <img src="screenshots/rgb_led.png" height="450" alt="RGB LED"/> <img src="screenshots/buzzer.png" height="450" alt="Buzzer"/> <img src="screenshots/ledmatrix.png" height="450" alt="Led Matrix"/> <img src="screenshots/ledmatrix_pattern.png" height="450" alt="Led Matrix Pattern"/> <img src="screenshots/ledmatrix_voice.png" height="450" alt="Led Matrix Voice"/> 
 
 ## Libraries used in this project
 
