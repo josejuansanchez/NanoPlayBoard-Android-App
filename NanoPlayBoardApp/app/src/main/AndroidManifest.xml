@@ -11,15 +11,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
-        </activity>
+        <activity android:name=".activities.ListViewActivity" />
         <activity android:name=".activities.PotentiometerActivity" />
         <activity android:name=".activities.LDRActivity" />
         <activity android:name=".activities.RGBActivity" />
