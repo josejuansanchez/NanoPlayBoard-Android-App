@@ -1,6 +1,5 @@
 package org.josejuansanchez.nanoplayboard.adapters;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,25 +17,16 @@ import java.util.List;
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ProjectViewHolder> {
 
-    public static class ProjectViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
-        TextView projectTitle;
-        TextView projectDescription;
-        ImageView projectImage;
-
-        public ProjectViewHolder(View itemView) {
-            super(itemView);
-            cardView = (CardView) itemView.findViewById(R.id.cardview);
-            projectTitle = (TextView) itemView.findViewById(R.id.project_title);
-            projectDescription = (TextView) itemView.findViewById(R.id.project_description);
-            projectImage = (ImageView) itemView.findViewById(R.id.project_image);
-        }
+    public interface OnItemClickListener {
+        void onItemClick(Project item);
     }
 
-    List<Project> projects;
+    private List<Project> projects;
+    private final OnItemClickListener listener;
 
-    public RecyclerViewAdapter(List<Project> projects) {
+    public RecyclerViewAdapter(List<Project> projects, OnItemClickListener listener) {
         this.projects = projects;
+        this.listener = listener;
     }
 
     @Override
@@ -51,6 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.projectTitle.setText(projects.get(position).getTitle());
         holder.projectDescription.setText(projects.get(position).getDescription());
         holder.projectImage.setImageResource(projects.get(position).getImageId());
+        holder.bind(projects.get(position), listener);
     }
 
     @Override
@@ -58,4 +49,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return projects.size();
     }
 
+    public static class ProjectViewHolder extends RecyclerView.ViewHolder {
+        private TextView projectTitle;
+        private TextView projectDescription;
+        private ImageView projectImage;
+
+        public ProjectViewHolder(View itemView) {
+            super(itemView);
+            projectTitle = (TextView) itemView.findViewById(R.id.project_title);
+            projectDescription = (TextView) itemView.findViewById(R.id.project_description);
+            projectImage = (ImageView) itemView.findViewById(R.id.project_image);
+        }
+
+        public void bind(final Project item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
+        }
+    }
 }

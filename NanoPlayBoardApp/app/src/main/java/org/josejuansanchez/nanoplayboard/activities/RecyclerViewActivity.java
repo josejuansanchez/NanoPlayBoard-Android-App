@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.adapters.RecyclerViewAdapter;
@@ -14,10 +15,10 @@ import java.util.List;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 
+    public static final String TAG = RecyclerViewActivity.class.getSimpleName();
     private List<Project> mProjects;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,11 @@ public class RecyclerViewActivity extends AppCompatActivity {
     }
 
     private void initializeAdapter() {
-        mAdapter = new RecyclerViewAdapter(mProjects);
-        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(new RecyclerViewAdapter(mProjects, new RecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Project item) {
+                Log.d(TAG, "onItenClick: " + item.getTitle());
+            }
+        }));
     }
 }
