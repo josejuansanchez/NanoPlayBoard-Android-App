@@ -16,14 +16,16 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
     private List<Project> mProjects;
     private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerview);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(llm);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         initializeProjects();
         initializeAdapter();
@@ -44,7 +46,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     }
 
     private void initializeAdapter() {
-        RecyclerViewAdapter rvAdapter = new RecyclerViewAdapter(mProjects);
-        mRecyclerView.setAdapter(rvAdapter);
+        mAdapter = new RecyclerViewAdapter(mProjects);
+        mRecyclerView.setAdapter(mAdapter);
     }
 }
