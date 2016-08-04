@@ -29,7 +29,7 @@
             android:id="@+id/project_title"
             android:layout_toRightOf="@+id/project_image"
             android:layout_alignParentTop="true"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="wrap_content"
