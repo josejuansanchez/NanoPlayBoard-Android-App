@@ -58,6 +58,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
         mProjects.add(new Project("Led Matrix", "Write a text and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Led Matrix Pattern", "Draw a pattern and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Led Matrix Voice", "Say something and display it on the led matrix", R.drawable._ledmatrix));
+        mProjects.add(new Project("Tools. Terminal", "Terminal for USB and Bluetooth connections", R.drawable._ledmatrix));
     }
 
     private void initializeAdapter() {
@@ -92,6 +93,9 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 break;
             case 6:
                 intent = new Intent(RecyclerViewActivity.this, LedMatrixVoiceActivity.class);
+                break;
+            case 7:
+                intent = new Intent(RecyclerViewActivity.this, TerminalActivity.class);
                 break;
         }
 
