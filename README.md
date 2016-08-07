@@ -1,14 +1,18 @@
 # NanoPlayBoard Android App
 
-Simple Android app to **experiment and play** with the [Arduino Nano PlayBoard][1]. The [Arduino Nano PlayBoard][1] is a board designed by [Antonio Morales][2] and it was designed for an introductory workshop about soldering organized by [HackLab Almería][3]. You can see the gallery of images [here][4].
+Simple Android app to **experiment and play** with the [Arduino Nano Play Board][1]. The [Arduino Nano Play Board][1] is a board designed by [Antonio Morales][2] and it was designed for an introductory workshop about soldering organized by [HackLab Almería][3]. You can see the gallery of images [here][4].
 
-The [Arduino Nano PlayBoard][1] is an **excellent educational resource** for those students who want **to learn basic electronic and programming**. 
+The [Arduino Nano Play Board][1] is an **excellent educational resource** for those students who want **to learn basic electronic and programming**. 
 
-The aim of this Android app is to expand the possibilities of the use of the [Arduino Nano PlayBoard][1], by allowing you to interact with the sensors and actuators available on the board or even interact with other elements connected to Internet.
+The aim of this Android app is to expand the possibilities of the use of the [Arduino Nano Play Board][1], by allowing you to interact with the sensors and actuators available on the board or even interact with other elements connected to Internet.
 
 For more information about the board please visit us at:  
 
-* https://github.com/AntonioMR/Arduino-Nano-Play-Board
+* http://github.com/AntonioMR/Nano-Play-Board
+
+For more information about the project please visit us at:
+
+* http://nanoplayboard.org
 
 ![upperside][5]
 ![underside][6]
@@ -18,7 +22,7 @@ For more information about the board please visit us at:
 ### USB OTG version
 ![USB OTG][usb_otg_version]
 
-* Arduino Nano PlayBoard.
+* Arduino Nano Play Board.
 * Arduino Nano + USB cable.
 * USB OTG cable.
 * Android device (version >= 4.1.x)
@@ -26,7 +30,7 @@ For more information about the board please visit us at:
 ### Bluetooth version
 ![Bluetooth][bluetooth_version]
 
-* Arduino Nano PlayBoard.
+* Arduino Nano Play Board.
 * Arduino Nano.
 * Arduino compatible Bluetooth module (HC-05 or HC-06).
 * Android device (version >= 4.1.x)
@@ -65,7 +69,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ```
 
-[1]: https://github.com/AntonioMR/Arduino-Nano-Play-Board
+[1]: http://github.com/AntonioMR/Nano-Play-Board
 [2]: http://twitter.com/antonio1010mr
 [3]: http://hacklabalmeria.net
 [4]: https://goo.gl/photos/VKdNkxRcpEW4yBa47
