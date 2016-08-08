@@ -52,13 +52,13 @@ public class RecyclerViewActivity extends AppCompatActivity {
     private void initializeProjects() {
         mProjects = new ArrayList<>();
         mProjects.add(new Project("Potentiometer", "Display the values received from the potentiometer", R.drawable._potentiometer));
-        mProjects.add(new Project("LDR", "Displays the values received from the potentiometer", R.drawable._ldr));
+        mProjects.add(new Project("LDR", "Displays the values received from the LDR", R.drawable._ldr));
         mProjects.add(new Project("RGB LED", "Change the color of the RGB LED", R.drawable._ledrgb));
         mProjects.add(new Project("Buzzer", "Choose a frequency and make the buzzer sounds", R.drawable._buzzer));
         mProjects.add(new Project("Led Matrix", "Write a text and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Led Matrix Pattern", "Draw a pattern and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Led Matrix Voice", "Say something and display it on the led matrix", R.drawable._ledmatrix));
-        mProjects.add(new Project("Tools. Terminal", "Terminal for USB and Bluetooth connections", R.drawable._ledmatrix));
+        mProjects.add(new Project("Tools. Terminal", "Terminal for USB and Bluetooth connections", R.drawable._terminal));
     }
 
     private void initializeAdapter() {
