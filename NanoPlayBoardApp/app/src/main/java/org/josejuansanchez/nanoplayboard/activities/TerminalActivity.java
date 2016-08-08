@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.josejuansanchez.nanoplayboard.R;
@@ -15,8 +16,9 @@ public class TerminalActivity extends AppCompatActivity {
 
     public static final String TAG = TerminalActivity.class.getSimpleName();
     private EditText mOutputMessage;
-    private TextView mInputMessage;
+    private TextView mLogMessages;
     private Button mButtonSend;
+    private ScrollView mScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +26,9 @@ public class TerminalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_terminal);
         setTitle("Terminal");
         mOutputMessage = (EditText) findViewById(R.id.edittext_output_message);
-        mInputMessage = (TextView) findViewById(R.id.textview_input_message);
+        mLogMessages = (TextView) findViewById(R.id.textview_log_messages);
         mButtonSend = (Button) findViewById(R.id.button_send);
+        mScrollView = (ScrollView) findViewById(R.id.scrollview);
         loadListeners();
         loadBluetoothListeners();
     }
@@ -37,6 +40,8 @@ public class TerminalActivity extends AppCompatActivity {
                 String message = mOutputMessage.getText().toString();
                 if (!message.trim().equals("")) {
                     sendMessage(message);
+                    mLogMessages.append("> " + message + "\n");
+                    updateScrollViewToBottom();
                 }
             }
         });
@@ -46,7 +51,8 @@ public class TerminalActivity extends AppCompatActivity {
         BluetoothSPP.getInstance().setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             @Override
             public void onDataReceived(byte[] data, String message) {
-                mInputMessage.append(message + "\n");
+                mLogMessages.append("< " + message + "\n");
+                updateScrollViewToBottom();
             }
         });
     }
@@ -59,4 +65,15 @@ public class TerminalActivity extends AppCompatActivity {
         }
     }
 
+    // This is a temporary solution in order to solve a minor issue with the scrollView.
+    // The scrollView does not scroll automatically when the textView is updated, so
+    // we need to do the scrolling "manually" using this method.
+    private void updateScrollViewToBottom() {
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            }
+        });
+    }
 }

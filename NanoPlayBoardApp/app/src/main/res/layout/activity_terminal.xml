@@ -9,21 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.josejuansanchez.nanoplayboard.activities.TerminalActivity">
 
-    <TextView
-        android:id="@+id/textview_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Status : Not connected"
-        android:textSize="12sp" />
-
     <Button
         android:id="@+id/button_send"
-        android:layout_above="@+id/textview_status"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
         android:layout_centerInParent="true"
         android:text="Send" />
 
@@ -33,15 +23,25 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
+        android:typeface="monospace"
+        android:inputType="textMultiLine"
         android:layout_above="@id/button_send"/>
 
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_above="@+id/edittext_output_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp">
+
     <TextView
-        android:id="@+id/textview_input_message"
+        android:id="@+id/textview_log_messages"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/edittext_output_message"
-        android:textSize="16sp"
-        android:scrollbars="vertical"
-        android:gravity="bottom" />
+        android:textSize="14sp"
+        android:typeface="monospace"
+        android:textColor="#424242" />
+
+    </ScrollView>
 
 </RelativeLayout>
