@@ -58,7 +58,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
         mProjects.add(new Project("Led Matrix", "Write a text and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Led Matrix Pattern", "Draw a pattern and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Led Matrix Voice", "Say something and display it on the led matrix", R.drawable._ledmatrix));
-        mProjects.add(new Project("Tools. Terminal", "Terminal for USB and Bluetooth connections", R.drawable._terminal));
+        mProjects.add(new Project("Terminal", "Terminal for USB and Bluetooth connections", R.drawable._terminal));
+        mProjects.add(new Project("MQTT", "Send and Receive MQTT messages", R.drawable._broadcasting));
     }
 
     private void initializeAdapter() {
@@ -97,6 +98,10 @@ public class RecyclerViewActivity extends AppCompatActivity {
             case 7:
                 intent = new Intent(RecyclerViewActivity.this, TerminalActivity.class);
                 break;
+            case 8:
+                intent = new Intent(RecyclerViewActivity.this, MqttActivity.class);
+                break;
+
         }
 
         if (intent != null) {

@@ -33,7 +33,12 @@
             android:name=".services.UsbService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".services.MqttService"
+            android:enabled="true"
+            android:exported="true" />
 
+        <activity android:name=".activities.MqttActivity"></activity>
     </application>
 
 </manifest>
