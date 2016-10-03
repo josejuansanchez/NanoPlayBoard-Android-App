@@ -10,7 +10,6 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -20,6 +19,9 @@ import com.felhr.usbserial.UsbSerialInterface;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.greenrobot.eventbus.EventBus;
+import org.josejuansanchez.nanoplayboard.events.UsbSerialActionEvent;
+import org.josejuansanchez.nanoplayboard.events.UsbSerialMessageEvent;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
 import java.io.UnsupportedEncodingException;
@@ -32,33 +34,34 @@ import java.util.Map;
 public class UsbService extends Service {
 
     public static final String TAG = UsbService.class.getSimpleName();
-    public static final String ACTION_USB_READY = "com.felhr.connectivityservices.USB_READY";
+    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
     public static final String ACTION_USB_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     public static final String ACTION_USB_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
-    public static final String ACTION_USB_NOT_SUPPORTED = "com.felhr.usbservice.USB_NOT_SUPPORTED";
-    public static final String ACTION_NO_USB = "com.felhr.usbservice.NO_USB";
-    public static final String ACTION_USB_PERMISSION_GRANTED = "com.felhr.usbservice.USB_PERMISSION_GRANTED";
-    public static final String ACTION_USB_PERMISSION_NOT_GRANTED = "com.felhr.usbservice.USB_PERMISSION_NOT_GRANTED";
-    public static final String ACTION_USB_DISCONNECTED = "com.felhr.usbservice.USB_DISCONNECTED";
-    public static final String ACTION_CDC_DRIVER_NOT_WORKING = "com.felhr.connectivityservices.ACTION_CDC_DRIVER_NOT_WORKING";
-    public static final String ACTION_USB_DEVICE_NOT_WORKING = "com.felhr.connectivityservices.ACTION_USB_DEVICE_NOT_WORKING";
+
+    public static final String ACTION_USB_READY = "org.josejuansanchez.nanoplayboard.USB_READY";
+    public static final String ACTION_USB_NOT_SUPPORTED = "org.josejuansanchez.nanoplayboard.USB_NOT_SUPPORTED";
+    public static final String ACTION_NO_USB = "org.josejuansanchez.nanoplayboard.NO_USB";
+    public static final String ACTION_USB_PERMISSION_GRANTED = "org.josejuansanchez.nanoplayboard.USB_PERMISSION_GRANTED";
+    public static final String ACTION_USB_PERMISSION_NOT_GRANTED = "org.josejuansanchez.nanoplayboard.USB_PERMISSION_NOT_GRANTED";
+    public static final String ACTION_USB_DISCONNECTED = "org.josejuansanchez.nanoplayboard.USB_DISCONNECTED";
+    public static final String ACTION_CDC_DRIVER_NOT_WORKING = "org.josejuansanchez.nanoplayboard.ACTION_CDC_DRIVER_NOT_WORKING";
+    public static final String ACTION_USB_DEVICE_NOT_WORKING = "org.josejuansanchez.nanoplayboard.ACTION_USB_DEVICE_NOT_WORKING";
+
     public static final int MESSAGE_FROM_SERIAL_PORT = 0;
     public static final int CTS_CHANGE = 1;
     public static final int DSR_CHANGE = 2;
-    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
-    private static final int BAUD_RATE = 115200; // BaudRate. Change this value if you need
+
     public static boolean SERVICE_CONNECTED = false;
+    private static final int BAUD_RATE = 115200;
 
     private IBinder binder = new UsbBinder();
-
-    private Context context;
-    private Handler mHandler;
     private UsbManager usbManager;
     private UsbDevice device;
     private UsbDeviceConnection connection;
     private UsbSerialDevice serialPort;
 
     private boolean serialPortConnected;
+
     /*
      *  Data received from serial port will be received here. Just populate onReceivedData with your code
      *  In this particular example. byte stream is converted to String and send to UI thread to
@@ -75,8 +78,7 @@ public class UsbService extends Service {
                 Gson gson = new Gson();
                 final NanoPlayBoardMessage message = gson.fromJson(data, NanoPlayBoardMessage.class);
 
-                if (mHandler != null)
-                    mHandler.obtainMessage(MESSAGE_FROM_SERIAL_PORT, message).sendToTarget();
+                EventBus.getDefault().post(new UsbSerialMessageEvent(MESSAGE_FROM_SERIAL_PORT, message));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (JsonSyntaxException jse) {
@@ -92,8 +94,7 @@ public class UsbService extends Service {
     private UsbSerialInterface.UsbCTSCallback ctsCallback = new UsbSerialInterface.UsbCTSCallback() {
         @Override
         public void onCTSChanged(boolean state) {
-            if(mHandler != null)
-                mHandler.obtainMessage(CTS_CHANGE).sendToTarget();
+            EventBus.getDefault().post(new UsbSerialMessageEvent(CTS_CHANGE));
         }
     };
 
@@ -103,10 +104,10 @@ public class UsbService extends Service {
     private UsbSerialInterface.UsbDSRCallback dsrCallback = new UsbSerialInterface.UsbDSRCallback() {
         @Override
         public void onDSRChanged(boolean state) {
-            if(mHandler != null)
-                mHandler.obtainMessage(DSR_CHANGE).sendToTarget();
+            EventBus.getDefault().post(new UsbSerialMessageEvent(DSR_CHANGE));
         }
     };
+
     /*
      * Different notifications from OS will be received here (USB attached, detached, permission responses...)
      * About BroadcastReceiver: http://developer.android.com/reference/android/content/BroadcastReceiver.html
@@ -118,22 +119,19 @@ public class UsbService extends Service {
                 boolean granted = arg1.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
                 if (granted) // User accepted our USB connection. Try to open the device as a serial port
                 {
-                    Intent intent = new Intent(ACTION_USB_PERMISSION_GRANTED);
-                    arg0.sendBroadcast(intent);
+                    EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_USB_PERMISSION_GRANTED));
                     connection = usbManager.openDevice(device);
                     new ConnectionThread().run();
-                } else // User not accepted our USB connection. Send an Intent to the Main Activity
+                } else
                 {
-                    Intent intent = new Intent(ACTION_USB_PERMISSION_NOT_GRANTED);
-                    arg0.sendBroadcast(intent);
+                    EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_USB_PERMISSION_NOT_GRANTED));
                 }
             } else if (arg1.getAction().equals(ACTION_USB_ATTACHED)) {
                 if (!serialPortConnected)
                     findSerialPortDevice(); // A USB device has been attached. Try to open it as a Serial port
             } else if (arg1.getAction().equals(ACTION_USB_DETACHED)) {
-                // Usb device was disconnected. send an intent to the Main Activity
-                Intent intent = new Intent(ACTION_USB_DISCONNECTED);
-                arg0.sendBroadcast(intent);
+                // Usb device was disconnected
+                EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_USB_DISCONNECTED));
                 serialPortConnected = false;
                 if (serialPortConnected) {
                     serialPort.close();
@@ -148,7 +146,6 @@ public class UsbService extends Service {
      */
     @Override
     public void onCreate() {
-        this.context = this;
         serialPortConnected = false;
         UsbService.SERVICE_CONNECTED = true;
         setFilter();
@@ -184,10 +181,6 @@ public class UsbService extends Service {
             serialPort.write(data);
     }
 
-    public void setHandler(Handler mHandler) {
-        this.mHandler = mHandler;
-    }
-
     private void findSerialPortDevice() {
         // This snippet will try to open the first encountered usb device connected, excluding usb root hubs
         HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
@@ -211,14 +204,12 @@ public class UsbService extends Service {
                     break;
             }
             if (!keep) {
-                // There is no USB devices connected (but usb host were listed). Send an intent to PotentiometerActivity.
-                Intent intent = new Intent(ACTION_NO_USB);
-                sendBroadcast(intent);
+                // There is no USB devices connected (but usb host were listed)
+                EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_NO_USB));
             }
         } else {
-            // There is no USB devices connected. Send an intent to PotentiometerActivity
-            Intent intent = new Intent(ACTION_NO_USB);
-            sendBroadcast(intent);
+            // There is no USB devices connected
+            EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_NO_USB));
         }
     }
 
@@ -269,24 +260,19 @@ public class UsbService extends Service {
                     serialPort.read(mCallback);
                     serialPort.getCTS(ctsCallback);
                     serialPort.getDSR(dsrCallback);
-                    // Everything went as expected. Send an intent to PotentiometerActivity
-                    Intent intent = new Intent(ACTION_USB_READY);
-                    context.sendBroadcast(intent);
+                    // Everything went as expected
+                    EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_USB_READY));
                 } else {
                     // Serial port could not be opened, maybe an I/O error or if CDC driver was chosen, it does not really fit
-                    // Send an Intent to Main Activity
                     if (serialPort instanceof CDCSerialDevice) {
-                        Intent intent = new Intent(ACTION_CDC_DRIVER_NOT_WORKING);
-                        context.sendBroadcast(intent);
+                        EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_CDC_DRIVER_NOT_WORKING));
                     } else {
-                        Intent intent = new Intent(ACTION_USB_DEVICE_NOT_WORKING);
-                        context.sendBroadcast(intent);
+                        EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_USB_DEVICE_NOT_WORKING));
                     }
                 }
             } else {
                 // No driver for given device, even generic CDC driver could not be loaded
-                Intent intent = new Intent(ACTION_USB_NOT_SUPPORTED);
-                context.sendBroadcast(intent);
+                EventBus.getDefault().post(new UsbSerialActionEvent(ACTION_USB_NOT_SUPPORTED));
             }
         }
     }

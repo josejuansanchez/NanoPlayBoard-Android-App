@@ -70,7 +70,6 @@ public class LedMatrixActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
             mUsbService = ((UsbService.UsbBinder) arg1).getService();
-            mUsbService.setHandler(mHandler);
         }
 
         @Override
