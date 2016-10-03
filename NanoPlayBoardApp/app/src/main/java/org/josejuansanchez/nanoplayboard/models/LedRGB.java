@@ -6,7 +6,7 @@ import android.graphics.Color;
  * Created by josejuansanchez on 25/6/16.
  */
 public class LedRGB {
-    private int sketchId;
+    private int id;
     private int r;
     private int g;
     private int b;
@@ -23,8 +23,8 @@ public class LedRGB {
         this.b = Color.blue(color);
     }
 
-    public LedRGB(int sketchId, int color) {
-        this.sketchId = sketchId;
+    public LedRGB(int id, int color) {
+        this.id = id;
         this.r = Color.red(color);
         this.g = Color.green(color);
         this.b = Color.blue(color);

@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import org.josejuansanchez.nanoplayboard.R;
+import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
@@ -96,8 +97,8 @@ public class LDRActivity extends AppCompatActivity {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Send to Arduino the sketch id for this Activity
-                sendJsonMessage(1);
+                // Send to Arduino a Json message with the id for this Activity
+                sendJsonMessage(ProtocolConstants.ID_LDR_READ);
             }
         });
     }
@@ -119,9 +120,9 @@ public class LDRActivity extends AppCompatActivity {
 
     }
 
-    private void sendJsonMessage(int sketchId) {
+    private void sendJsonMessage(int id) {
         // Create the Json message
-        NanoPlayBoardMessage message = new NanoPlayBoardMessage(sketchId);
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(id);
         Gson gson = new Gson();
         Log.d(TAG, "JSON: " + gson.toJson(message));
 

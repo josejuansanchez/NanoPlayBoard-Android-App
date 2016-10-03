@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.R;
+import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.Buzzer;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
@@ -110,7 +111,7 @@ public class BuzzerActivity extends AppCompatActivity {
 
     private void sendJsonMessage(int frequency, int duration) {
         // Create the Json message
-        Buzzer message = new Buzzer(3, frequency, duration);
+        Buzzer message = new Buzzer(ProtocolConstants.ID_BUZZER_PLAY_TONE, frequency, duration);
         Gson gson = new Gson();
         Log.d(TAG, "JSON: " + gson.toJson(message));
 

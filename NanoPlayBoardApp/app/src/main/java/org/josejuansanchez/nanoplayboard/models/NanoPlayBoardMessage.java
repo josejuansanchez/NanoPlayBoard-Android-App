@@ -7,12 +7,12 @@ public class NanoPlayBoardMessage {
     private int potentiometer;
     private int ldr;
     private String error;
-    private int sketchId;
+    private int id;
 
     public NanoPlayBoardMessage() {};
 
-    public NanoPlayBoardMessage(int sketchId) {
-        this.sketchId = sketchId;
+    public NanoPlayBoardMessage(int id) {
+        this.id = id;
     }
 
     public int getPotentiometer() {
@@ -39,11 +39,11 @@ public class NanoPlayBoardMessage {
         this.error = error;
     }
 
-    public int getSketchId() {
-        return sketchId;
+    public int getId() {
+        return id;
     }
 
-    public void setSketchId(int sketchId) {
-        this.sketchId = sketchId;
+    public void setId(int id) {
+        this.id = id;
     }
 }

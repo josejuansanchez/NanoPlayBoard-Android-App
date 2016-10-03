@@ -22,6 +22,7 @@ import com.christophesmet.android.views.colorpicker.ColorPickerView;
 import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.R;
+import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.LedRGB;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
@@ -120,7 +121,7 @@ public class RGBActivity extends AppCompatActivity {
 
     private void sendJsonMessage(int color) {
         // Create the Json message
-        LedRGB message = new LedRGB(2, color);
+        LedRGB message = new LedRGB(ProtocolConstants.ID_RGB_SET_COLOR, color);
         Gson gson = new Gson();
         Log.d(TAG, "JSON: " + gson.toJson(message));
 

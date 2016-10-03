@@ -4,7 +4,7 @@ package org.josejuansanchez.nanoplayboard.models;
  * Created by josejuansanchez on 29/06/16.
  */
 public class LedMatrix {
-    private int sketchId;
+    private int id;
     private String text;
     private int[] pattern;
 
@@ -12,13 +12,13 @@ public class LedMatrix {
         this.text = text;
     }
 
-    public LedMatrix(int sketchId, String text) {
-        this.sketchId = sketchId;
+    public LedMatrix(int id, String text) {
+        this.id = id;
         this.text = text;
     }
 
-    public LedMatrix(int sketchId, int[] pattern) {
-        this.sketchId = sketchId;
+    public LedMatrix(int id, int[] pattern) {
+        this.id = id;
         this.pattern = pattern;
     }
 

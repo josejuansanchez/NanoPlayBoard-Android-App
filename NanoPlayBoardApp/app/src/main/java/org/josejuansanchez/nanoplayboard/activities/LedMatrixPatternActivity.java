@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import org.josejuansanchez.nanoplayboard.R;
+import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.LedMatrix;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
@@ -168,7 +169,7 @@ public class LedMatrixPatternActivity extends AppCompatActivity {
 
     private void sendJsonMessage(int pattern[]) {
         // Create the Json message
-        LedMatrix message = new LedMatrix(5, pattern);
+        LedMatrix message = new LedMatrix(ProtocolConstants.ID_LEDMATRIX_PRINT_PATTERN, pattern);
         Gson gson = new Gson();
         Log.d(TAG, "JSON: " + gson.toJson(message));
 
