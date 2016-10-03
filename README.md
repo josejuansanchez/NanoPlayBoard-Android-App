@@ -73,8 +73,8 @@ limitations under the License.
 [2]: http://twitter.com/antonio1010mr
 [3]: http://hacklabalmeria.net
 [4]: https://goo.gl/photos/VKdNkxRcpEW4yBa47
-[5]: https://github.com/josejuansanchez/NanoPlayBoard/blob/master/NanoPlayBoard/extras/upperside.png
-[6]: https://github.com/josejuansanchez/NanoPlayBoard/blob/master/NanoPlayBoard/extras/underside.png
+[5]: https://github.com/josejuansanchez/NanoPlayBoard-Arduino-Library/blob/master/extras/upperside_v1.png
+[6]: https://github.com/josejuansanchez/NanoPlayBoard-Arduino-Library/blob/master/extras/underside_v1.png
 [7]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/screenshots/potentiometer.png
 [8]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/screenshots/ldr.png
 [9]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/screenshots/rgb_led.png
