@@ -50,6 +50,7 @@ For more information about the project please visit us at:
 * [MarkView][16]
 * [ColorPicker][17]
 * [Android-BluetoothSPPLibrary][18]
+* [EventBus][19]
 
 ## License
 
@@ -87,6 +88,7 @@ limitations under the License.
 [16]: https://github.com/xiprox/MarkView
 [17]: https://github.com/christophesmet/colorpicker
 [18]: https://github.com/akexorcist/Android-BluetoothSPPLibrary
+[19]: https://github.com/greenrobot/EventBus
 
 [usb_otg_version]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/extras/_items.jpg
 [bluetooth_version]: https://github.com/josejuansanchez/NanoPlayBoard-AndroidApp/blob/master/extras/bluetooth_beach.jpg
