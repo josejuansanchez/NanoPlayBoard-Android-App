@@ -10,7 +10,7 @@ import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
 import tr.xip.markview.MarkView;
 
-public class PotentiometerActivity extends NanoPlayBoardActivity {
+public class UsbTestActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = PotentiometerActivity.class.getSimpleName();
     private MarkView mMarkViewPotentiometer;
@@ -44,5 +44,4 @@ public class PotentiometerActivity extends NanoPlayBoardActivity {
     public void onBluetoothMessage(NanoPlayBoardMessage message) {
         mMarkViewPotentiometer.setMark(message.getPotentiometer());
     }
-
 }

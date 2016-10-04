@@ -77,14 +77,12 @@ public class UsbService extends Service {
                 // Convert json to a NanoPlayBoardMessage object
                 Gson gson = new Gson();
                 final NanoPlayBoardMessage message = gson.fromJson(data, NanoPlayBoardMessage.class);
-
                 EventBus.getDefault().post(new UsbSerialMessageEvent(MESSAGE_FROM_SERIAL_PORT, message));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (JsonSyntaxException jse) {
                 jse.printStackTrace();
             }
-
         }
     };
 
@@ -174,7 +172,7 @@ public class UsbService extends Service {
     }
 
     /*
-     * This function will be called from PotentiometerActivity to write data through Serial Port
+     * This function will be called from Activities to write data through Serial Port
      */
     public void write(byte[] data) {
         if (serialPort != null)
