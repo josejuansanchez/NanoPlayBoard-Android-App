@@ -74,7 +74,6 @@ public class MqttService extends Service {
         }
     }
 
-
     public void publish(final String topic, final String payload) {
         try {
             MqttMessage mqttMessage = new MqttMessage();

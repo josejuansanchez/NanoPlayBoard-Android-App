@@ -6,4 +6,14 @@
     <string name="bluetooth_status_failed">Connection has failed</string>
     <string name="bluetooth_status_connected">"Connected to "</string>
     <string name="bluetooth_status_not_enabled">Bluetooth was not enabled</string>
+    <string name="mqtt_broker_url">Broker URL</string>
+    <string name="mqtt_password">Password (optional)</string>
+    <string name="mqtt_port">Port (default 1883)</string>
+    <string name="mqtt_button_publish">Publish</string>
+    <string name="mqtt_username">Username (optional)</string>
+    <string name="mqtt_topic_publish">Topic Publish</string>
+    <string name="mqtt_checkbox_ldr">LDR</string>
+    <string name="mqtt_checkbox_potentiometer">Potentiometer</string>
+    <string name="mqtt_toggle_publish_off">PUBLISH - OFF</string>
+    <string name="mqtt_toggle_publish_on">PUBLISH - ON</string>
 </resources>
