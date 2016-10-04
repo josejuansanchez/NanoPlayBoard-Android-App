@@ -33,10 +33,10 @@ public class RGBActivity extends NanoPlayBoardActivity {
         mColorSelectedGreen = (TextView) findViewById(R.id.colorselected_green);
         mColorSelectedBlue = (TextView) findViewById(R.id.colorselected_blue);
         mColorPickerView.setDrawDebug(false);
-        loadListeners();
+        setListeners();
     }
 
-    public void loadListeners() {
+    public void setListeners() {
         mColorPickerView.setColorListener(new ColorPickerView.ColorListener() {
             @Override
             public void onColorSelected(int color) {

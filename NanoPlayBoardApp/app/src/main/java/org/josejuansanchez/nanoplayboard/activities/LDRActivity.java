@@ -23,10 +23,10 @@ public class LDRActivity extends NanoPlayBoardActivity {
         setTitle("LDR");
         mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
         mButtonStart = (Button) findViewById(R.id.button_start);
-        loadListeners();
+        setListeners();
     }
 
-    private void loadListeners() {
+    private void setListeners() {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

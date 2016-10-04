@@ -23,10 +23,10 @@ public class PotentiometerActivity extends NanoPlayBoardActivity {
         setTitle("Potentiometer");
         mMarkViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
         mButtonStart = (Button) findViewById(R.id.button_start);
-        loadListeners();
+        setListeners();
     }
 
-    private void loadListeners() {
+    private void setListeners() {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
