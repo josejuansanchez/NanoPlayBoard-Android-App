@@ -11,16 +11,19 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.josejuansanchez.nanoplayboard.adapters.CollectionAdapter;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialActionEvent;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialMessageEvent;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
+import java.util.Collection;
 import java.util.Set;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -145,9 +148,10 @@ public class NanoPlayBoardActivity extends AppCompatActivity {
 
     protected void onBluetoothMessage(NanoPlayBoardMessage message) {}
 
-    protected void sendJsonMessage(int id) {
-        NanoPlayBoardMessage message = new NanoPlayBoardMessage(id);
-        Gson gson = new Gson();
+    protected void sendJsonMessage(NanoPlayBoardMessage message) {
+        Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(
+                Collection.class, new CollectionAdapter()).create();
+
         Log.d(TAG, "JSON: " + gson.toJson(message));
 
         // if UsbService was correctly binded, send data
