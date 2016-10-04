@@ -61,6 +61,7 @@ public class NanoPlayBoardActivity extends AppCompatActivity {
                     onBluetoothMessage(message);
                 } catch (JsonSyntaxException jse) {
                     jse.printStackTrace();
+                    Log.e(TAG, "Data received: " + msg);
                 }
             }
         });
