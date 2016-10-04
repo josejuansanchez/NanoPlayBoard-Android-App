@@ -1,7 +1,6 @@
 package org.josejuansanchez.nanoplayboard.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,9 +9,7 @@ import android.widget.TextView;
 
 import org.josejuansanchez.nanoplayboard.R;
 
-import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-
-public class TerminalActivity extends AppCompatActivity {
+public class TerminalActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = TerminalActivity.class.getSimpleName();
     private EditText mOutputMessage;
@@ -29,40 +26,33 @@ public class TerminalActivity extends AppCompatActivity {
         mLogMessages = (TextView) findViewById(R.id.textview_log_messages);
         mButtonSend = (Button) findViewById(R.id.button_send);
         mScrollView = (ScrollView) findViewById(R.id.scrollview);
-        loadListeners();
-        loadBluetoothListeners();
+        setListeners();
     }
 
-    private void loadListeners() {
+    private void setListeners() {
         mButtonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = mOutputMessage.getText().toString();
-                if (!message.trim().equals("")) {
-                    sendMessage(message);
-                    mLogMessages.append("> " + message + "\n");
+                String data = mOutputMessage.getText().toString();
+                if (!data.trim().equals("")) {
+                    sendString(data);
+                    mLogMessages.append("> " + data + "\n");
                     updateScrollViewToBottom();
                 }
             }
         });
     }
 
-    private void loadBluetoothListeners() {
-        BluetoothSPP.getInstance().setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
-            @Override
-            public void onDataReceived(byte[] data, String message) {
-                mLogMessages.append("< " + message + "\n");
-                updateScrollViewToBottom();
-            }
-        });
+    @Override
+    protected void onBluetoothString(String data) {
+        mLogMessages.append("< " + data + "\n");
+        updateScrollViewToBottom();
     }
 
-    private void sendMessage(String message) {
-        // if Bluetooth service is correctly connected, send data
-        if (BluetoothSPP.getInstance().isServiceAvailable()) {
-            BluetoothSPP.getInstance().send(message.getBytes(), false);
-            BluetoothSPP.getInstance().send("\n".getBytes(), false);
-        }
+    @Override
+    protected void onUsbSerialString(String data) {
+        mLogMessages.append("< " + data + "\n");
+        updateScrollViewToBottom();
     }
 
     // This is a temporary solution in order to solve a minor issue with the scrollView.

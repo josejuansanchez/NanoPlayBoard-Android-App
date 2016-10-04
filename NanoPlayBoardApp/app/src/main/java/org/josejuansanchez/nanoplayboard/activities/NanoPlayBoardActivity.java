@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.josejuansanchez.nanoplayboard.adapters.CollectionAdapter;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialActionEvent;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialMessageEvent;
+import org.josejuansanchez.nanoplayboard.events.UsbSerialStringEvent;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.UsbService;
 
@@ -56,12 +57,14 @@ public class NanoPlayBoardActivity extends AppCompatActivity {
             @Override
             public void onDataReceived(byte[] data, String msg) {
                 try {
+                    Log.d(TAG, "Data received (Bluetooth): " + msg);
+                    onBluetoothString(msg);
+
                     Gson gson = new Gson();
                     final NanoPlayBoardMessage message = gson.fromJson(msg, NanoPlayBoardMessage.class);
                     onBluetoothMessage(message);
                 } catch (JsonSyntaxException jse) {
                     jse.printStackTrace();
-                    Log.e(TAG, "Data received: " + msg);
                 }
             }
         });
@@ -145,9 +148,19 @@ public class NanoPlayBoardActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(UsbSerialStringEvent event) {
+        Log.d(TAG, "Data received (UsbSerial): "  + event.data);
+        onUsbSerialString(event.data);
+    }
+
     protected void onUsbSerialMessage(NanoPlayBoardMessage message) {}
 
     protected void onBluetoothMessage(NanoPlayBoardMessage message) {}
+
+    protected void onUsbSerialString(String data) {}
+
+    protected void onBluetoothString(String data) {}
 
     protected void sendJsonMessage(NanoPlayBoardMessage message) {
         Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(
@@ -168,4 +181,17 @@ public class NanoPlayBoardActivity extends AppCompatActivity {
         }
     }
 
+    protected void sendString(String data) {
+        // if UsbService was correctly binded, send data
+        if (mUsbService != null) {
+            mUsbService.write(data.getBytes());
+            mUsbService.write("\n".getBytes());
+        }
+
+        // if Bluetooth service is correctly connected, send data
+        if (BluetoothSPP.getInstance().isServiceAvailable()) {
+            BluetoothSPP.getInstance().send(data.getBytes(), false);
+            BluetoothSPP.getInstance().send("\n".getBytes(), false);
+        }
+    }
 }

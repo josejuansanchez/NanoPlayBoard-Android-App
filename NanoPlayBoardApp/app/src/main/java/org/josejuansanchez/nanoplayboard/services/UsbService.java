@@ -11,7 +11,6 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.felhr.usbserial.CDCSerialDevice;
 import com.felhr.usbserial.UsbSerialDevice;
@@ -22,6 +21,7 @@ import com.google.gson.JsonSyntaxException;
 import org.greenrobot.eventbus.EventBus;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialActionEvent;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialMessageEvent;
+import org.josejuansanchez.nanoplayboard.events.UsbSerialStringEvent;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
 import java.io.UnsupportedEncodingException;
@@ -72,7 +72,7 @@ public class UsbService extends Service {
         public void onReceivedData(byte[] arg0) {
             try {
                 String data = new String(arg0, "UTF-8");
-                Log.d(TAG, "Response: " + data);
+                EventBus.getDefault().post(new UsbSerialStringEvent(data));
 
                 // Convert json to a NanoPlayBoardMessage object
                 Gson gson = new Gson();
