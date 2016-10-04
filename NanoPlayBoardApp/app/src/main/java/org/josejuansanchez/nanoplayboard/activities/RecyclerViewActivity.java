@@ -103,7 +103,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 intent = new Intent(RecyclerViewActivity.this, MqttActivity.class);
                 break;
             case 9:
-                intent = new Intent(RecyclerViewActivity.this, UsbTestActivity.class);
+                intent = new Intent(RecyclerViewActivity.this, TestActivity.class);
                 break;
         }
 

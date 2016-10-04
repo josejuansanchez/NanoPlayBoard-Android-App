@@ -10,18 +10,18 @@ import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
 import tr.xip.markview.MarkView;
 
-public class UsbTestActivity extends NanoPlayBoardActivity {
+public class TestActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = PotentiometerActivity.class.getSimpleName();
-    private MarkView mMarkViewPotentiometer;
+    private MarkView mMarkViewLdr;
     private Button mButtonStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_potentiometer);
-        setTitle("Potentiometer");
-        mMarkViewPotentiometer = (MarkView) findViewById(R.id.mark_potentiometer);
+        setContentView(R.layout.activity_ldr);
+        setTitle("LDR");
+        mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
         mButtonStart = (Button) findViewById(R.id.button_start);
         loadListeners();
     }
@@ -30,18 +30,18 @@ public class UsbTestActivity extends NanoPlayBoardActivity {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendJsonMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
+                sendJsonMessage(ProtocolConstants.ID_LDR_READ);
             }
         });
     }
 
     @Override
     public void onUsbSerialMessage(NanoPlayBoardMessage message) {
-        mMarkViewPotentiometer.setMark(message.getPotentiometer());
+        mMarkViewLdr.setMark(message.getLdr());
     }
 
     @Override
     public void onBluetoothMessage(NanoPlayBoardMessage message) {
-        mMarkViewPotentiometer.setMark(message.getPotentiometer());
+        mMarkViewLdr.setMark(message.getLdr());
     }
 }
