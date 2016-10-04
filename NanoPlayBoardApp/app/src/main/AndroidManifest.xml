@@ -40,7 +40,6 @@
 
         <activity android:name=".activities.MqttActivity" />
         <activity android:name=".activities.NanoPlayBoardActivity" />
-        <activity android:name=".activities.TestActivity"></activity>
     </application>
 
 </manifest>
