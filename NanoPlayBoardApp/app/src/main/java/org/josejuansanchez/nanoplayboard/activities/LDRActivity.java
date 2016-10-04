@@ -30,19 +30,21 @@ public class LDRActivity extends NanoPlayBoardActivity {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendJsonMessage(ProtocolConstants.ID_LDR_READ);
+                NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_LDR_READ);
+                sendJsonMessage(message);
             }
         });
     }
 
     @Override
     public void onUsbSerialMessage(NanoPlayBoardMessage message) {
-        mMarkViewLdr.setMark(message.getLdr());
+        if (message.getLdr() == null) return;
+        mMarkViewLdr.setMark(message.getLdr().intValue());
     }
 
     @Override
     public void onBluetoothMessage(NanoPlayBoardMessage message) {
-        mMarkViewLdr.setMark(message.getLdr());
+        if (message.getLdr() == null) return;
+        mMarkViewLdr.setMark(message.getLdr().intValue());
     }
-
 }

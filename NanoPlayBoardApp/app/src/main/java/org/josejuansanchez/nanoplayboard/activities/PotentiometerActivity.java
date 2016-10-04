@@ -30,19 +30,21 @@ public class PotentiometerActivity extends NanoPlayBoardActivity {
         mButtonStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendJsonMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
+                NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
+                sendJsonMessage(message);
             }
         });
     }
 
     @Override
     public void onUsbSerialMessage(NanoPlayBoardMessage message) {
-        mMarkViewPotentiometer.setMark(message.getPotentiometer());
+        if (message.getPotentiometer() == null) return;
+        mMarkViewPotentiometer.setMark(message.getPotentiometer().intValue());
     }
 
     @Override
     public void onBluetoothMessage(NanoPlayBoardMessage message) {
-        mMarkViewPotentiometer.setMark(message.getPotentiometer());
+        if (message.getPotentiometer() == null) return;
+        mMarkViewPotentiometer.setMark(message.getPotentiometer().intValue());
     }
-
 }
