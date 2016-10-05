@@ -7,9 +7,11 @@ package org.josejuansanchez.nanoplayboard.constants;
 public class ProtocolConstants {
     public static final int ID_POTENTIOMETER_READ = 10;
     public static final int ID_POTENTIOMETER_SCALE_TO = 11;
+    public static final int ID_POTENTIOMETER_STOP = 12;
 
     public static final int ID_LDR_READ = 20;
     public static final int ID_LDR_SCALE_TO = 21;
+    public static final int ID_LDR_STOP = 22;
 
     public static final int ID_RGB_ON = 30;
     public static final int ID_RGB_OFF = 31;
