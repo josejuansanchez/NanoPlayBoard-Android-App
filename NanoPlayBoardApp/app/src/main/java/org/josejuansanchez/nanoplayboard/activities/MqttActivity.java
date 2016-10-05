@@ -4,8 +4,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.design.widget.Snackbar;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
@@ -22,13 +24,18 @@ import butterknife.OnCheckedChanged;
 public class MqttActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = MqttActivity.class.getSimpleName();
-    private String uri = "tcp://test.mosquitto.org:1883";
-    private String port = "1883";
-    private String topicPublish = "nanoplayboard";
-    private String topicSubscribe = "nanoplayboard";
-    private String clientId = "";
-    private String username = "";
-    private String password = "";
+    private String uri;
+    private String url;
+    private String port;
+    private String topicPublish;
+    private String topicSubscribe;
+    private String clientId;
+    private String username;
+    private String password;
+    private final String MQTT_DEFAULT_BROKER_URL = "tcp://test.mosquitto.org";
+    private final String MQTT_DEFAULT_PORT = "1883";
+    private final String MQTT_DEFAULT_TOPIC_PUBLISH = "nanoplayboard";
+    private final String MQTT_DEFAULT_CLIENT_ID = "to-do-change-this";
 
     @BindView(R.id.edittext_broker_url) EditText mBrokerUrl;
     @BindView(R.id.edittext_port) EditText mPort;
@@ -41,16 +48,11 @@ public class MqttActivity extends NanoPlayBoardActivity {
     boolean mBound = false;
 
     private ServiceConnection mConnection = new ServiceConnection() {
-
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             MqttService.LocalBinder binder = (MqttService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
-
-            // TODO: Review
-            mService.connect(uri, clientId);
-            mService.subscribe(topicSubscribe, 1);
         }
 
         @Override
@@ -65,20 +67,32 @@ public class MqttActivity extends NanoPlayBoardActivity {
         setContentView(R.layout.activity_mqtt);
         setTitle("MQTT");
         ButterKnife.bind(this);
+        readFromSharedPreferences();
+        setMqttSettings();
     }
 
     @OnCheckedChanged(R.id.togglebutton_publish)
     void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
+            if (validateMqttSettings() == false) return;
+            getMqttSettings();
+
             NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
             sendJsonMessage(message);
-            if (mBound) {
-                mService.connect(uri, clientId);
-                mService.subscribe(topicSubscribe, 1);
+
+            if (mBound == false) return;
+            if (mService.connect(uri, MQTT_DEFAULT_CLIENT_ID)) {
+                Snackbar.make(mBrokerUrl, R.string.mqtt_successful_connection, Snackbar.LENGTH_LONG).show();
+                writeToSharedPreferences();
+            } else {
+                Snackbar.make(mBrokerUrl, R.string.mqtt_error_connect, Snackbar.LENGTH_LONG).show();
+                mToggleButtonPublish.setChecked(false);
             }
         } else {
-            // TODO: Include a new message to stop the reading process in the board
-            if (mBound) mService.disconnect();
+            NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_STOP);
+            sendJsonMessage(message);
+
+            if (mBound && mService.isConnected()) mService.disconnect();
         }
     }
 
@@ -112,8 +126,58 @@ public class MqttActivity extends NanoPlayBoardActivity {
 
     @Override
     public void onBluetoothString(String data) {
-        if (mBound) {
+        if (mBound && mService.isConnected()) {
             mService.publish(topicPublish, data);
         }
+    }
+
+    private void setMqttSettings() {
+        mBrokerUrl.setText(url);
+        mPort.setText(port);
+        mTopicPublish.setText(topicPublish);
+    }
+
+    private void getMqttSettings() {
+        url = mBrokerUrl.getText().toString().trim();
+
+        if (!mPort.getText().toString().trim().isEmpty()) {
+            port = mPort.getText().toString().trim();
+        } else {
+            port = MQTT_DEFAULT_PORT;
+        }
+
+        uri = url + ":" + port;
+
+        topicPublish = mTopicPublish.getText().toString().trim();
+    }
+
+    private boolean validateMqttSettings() {
+        if (mBrokerUrl.getText().toString().trim().isEmpty()) {
+            Snackbar.make(mBrokerUrl, R.string.mqtt_error_broker_url, Snackbar.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (mTopicPublish.getText().toString().trim().isEmpty()) {
+            Snackbar.make(mBrokerUrl, R.string.mqtt_error_topic_publish, Snackbar.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void writeToSharedPreferences() {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getString(R.string.saved_mqtt_broker_url), url);
+        editor.putString(getString(R.string.saved_mqtt_port), port);
+        editor.putString(getString(R.string.saved_mqtt_topic_publish), topicPublish);
+        editor.commit();
+    }
+
+    private void readFromSharedPreferences() {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        url = sharedPref.getString(getString(R.string.saved_mqtt_broker_url), MQTT_DEFAULT_BROKER_URL);
+        port = sharedPref.getString(getString(R.string.saved_mqtt_port), MQTT_DEFAULT_PORT);
+        topicPublish = sharedPref.getString(getString(R.string.saved_mqtt_topic_publish), MQTT_DEFAULT_TOPIC_PUBLISH);
     }
 }
