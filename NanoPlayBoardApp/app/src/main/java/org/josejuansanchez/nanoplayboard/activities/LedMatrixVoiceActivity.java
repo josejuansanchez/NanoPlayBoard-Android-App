@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
@@ -14,37 +11,25 @@ import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class LedMatrixVoiceActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = LedMatrixVoiceActivity.class.getSimpleName();
     private static final int SPEECH_REQUEST_CODE = 0;
-    private Button mButtonSpeak;
-    private ImageView mImageSpeak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_led_matrix_voice);
         setTitle("Led Matrix");
-        mButtonSpeak = (Button) findViewById(R.id.button_speak);
-        mImageSpeak = (ImageView) findViewById(R.id.image_speak);
-        setListeners();
+        ButterKnife.bind(this);
     }
 
-    private void setListeners() {
-        mButtonSpeak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displaySpeechRecognizer();
-            }
-        });
-
-        mImageSpeak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                displaySpeechRecognizer();
-            }
-        });
+    @OnClick({R.id.button_speak, R.id.image_speak})
+    void onClick() {
+        displaySpeechRecognizer();
     }
 
     // Source: https://developer.android.com/training/wearables/apps/voice.html

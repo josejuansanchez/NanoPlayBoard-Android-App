@@ -1,39 +1,33 @@
 package org.josejuansanchez.nanoplayboard.activities;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import tr.xip.markview.MarkView;
 
 public class LDRActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = LDRActivity.class.getSimpleName();
-    private MarkView mMarkViewLdr;
-    private Button mButtonStart;
+    @BindView(R.id.mark_ldr) MarkView mMarkViewLdr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ldr);
         setTitle("LDR");
-        mMarkViewLdr = (MarkView) findViewById(R.id.mark_ldr);
-        mButtonStart = (Button) findViewById(R.id.button_start);
-        setListeners();
+        ButterKnife.bind(this);
     }
 
-    private void setListeners() {
-        mButtonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_LDR_READ);
-                sendJsonMessage(message);
-            }
-        });
+    @OnClick(R.id.button_start)
+    void onClick() {
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_LDR_READ);
+        sendJsonMessage(message);
     }
 
     @Override

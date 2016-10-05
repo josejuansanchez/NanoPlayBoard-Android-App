@@ -15,12 +15,16 @@ import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+
 public class LedMatrixPatternActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = LedMatrixPatternActivity.class.getSimpleName();
-    private TextView mPatternSelectedDec;
-    private TextView mPatternSelectedHex;
-    private GridView mGridView;
+    @BindView(R.id.pattern_selected_decimal) TextView mPatternSelectedDec;
+    @BindView(R.id.pattern_selected_hexadecimal) TextView mPatternSelectedHex;
+    @BindView(R.id.gridview) GridView mGridView;
     private final int MATRIX_ROWS = 7;
     private final int MATRIX_COLS = 5;
 
@@ -30,36 +34,28 @@ public class LedMatrixPatternActivity extends NanoPlayBoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_led_matrix_pattern);
         setTitle("Led Matrix");
-        mPatternSelectedDec = (TextView) findViewById(R.id.pattern_selected_decimal);
-        mPatternSelectedHex = (TextView) findViewById(R.id.pattern_selected_hexadecimal);
-        mGridView = (GridView) findViewById(R.id.gridview);
+        ButterKnife.bind(this);
         mGridView.setAdapter(new LedMatrixPatternActivity.ImageAdapter(this));
-        setListeners();
     }
 
-    private void setListeners() {
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
+    @OnItemClick(R.id.gridview)
+    void onItenClick(AdapterView<?> parent, View v, int position, long id) {
+        // Update the thumbnail of the item (is on or off?)
+        int thumbId = ((LedMatrixPatternActivity.ImageAdapter)mGridView.getAdapter()).getItemThumbId(position);
+        if (thumbId == R.drawable.led_off) {
+            ((LedMatrixPatternActivity.ImageAdapter)mGridView.getAdapter()).setItemThumbId(position, R.drawable.led_on);
+        } else {
+            ((LedMatrixPatternActivity.ImageAdapter)mGridView.getAdapter()).setItemThumbId(position, R.drawable.led_off);
+        }
 
-                // Update the thumbnail of the item (is on or off?)
-                int thumbId = ((LedMatrixPatternActivity.ImageAdapter)mGridView.getAdapter()).getItemThumbId(position);
-                if (thumbId == R.drawable.led_off) {
-                    ((LedMatrixPatternActivity.ImageAdapter)mGridView.getAdapter()).setItemThumbId(position, R.drawable.led_on);
-                } else {
-                    ((LedMatrixPatternActivity.ImageAdapter)mGridView.getAdapter()).setItemThumbId(position, R.drawable.led_off);
-                }
+        // Calculate the values of the matrix and send the JSON message
+        boolean matrix[][] = createMatrixFromAdapter();
+        int columns[] = convertColumnsMatrixToInt(matrix);
 
-                // Calculate the values of the matrix and send the JSON message
-                boolean matrix[][] = createMatrixFromAdapter();
-                int columns[] = convertColumnsMatrixToInt(matrix);
-
-                NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_LEDMATRIX_PRINT_PATTERN);
-                message.setPattern(columns);
-                sendJsonMessage(message);
-                updateTextViewPattern(columns);
-            }
-        });
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_LEDMATRIX_PRINT_PATTERN);
+        message.setPattern(columns);
+        sendJsonMessage(message);
+        updateTextViewPattern(columns);
     }
 
     // Create a matrix of booleans from the adapter used for the GridView

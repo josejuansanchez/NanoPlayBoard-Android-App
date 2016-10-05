@@ -15,6 +15,10 @@ import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.MqttService;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+
 public class MqttActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = MqttActivity.class.getSimpleName();
@@ -26,12 +30,12 @@ public class MqttActivity extends NanoPlayBoardActivity {
     private String username = "";
     private String password = "";
 
-    private EditText mBrokerUrl;
-    private EditText mPort;
-    private EditText mUsername;
-    private EditText mPassword;
-    private EditText mTopicPublish;
-    private ToggleButton mToggleButtonPublish;
+    @BindView(R.id.edittext_broker_url) EditText mBrokerUrl;
+    @BindView(R.id.edittext_port) EditText mPort;
+    @BindView(R.id.edittext_username) EditText mUsername;
+    @BindView(R.id.edittext_password) EditText mPassword;
+    @BindView(R.id.edittext_topic_publish) EditText mTopicPublish;
+    @BindView(R.id.togglebutton_publish) ToggleButton mToggleButtonPublish;
 
     MqttService mService;
     boolean mBound = false;
@@ -60,33 +64,22 @@ public class MqttActivity extends NanoPlayBoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mqtt);
         setTitle("MQTT");
-        mBrokerUrl = (EditText) findViewById(R.id.edittext_broker_url);
-        mPort = (EditText) findViewById(R.id.edittext_port);
-        mUsername = (EditText) findViewById(R.id.edittext_username);
-        mPassword = (EditText) findViewById(R.id.edittext_password);
-        mTopicPublish = (EditText) findViewById(R.id.edittext_topic_publish);
-        mToggleButtonPublish = (ToggleButton) findViewById(R.id.togglebutton_publish);
-        setListeners();
+        ButterKnife.bind(this);
     }
 
-    public void setListeners() {
-
-        mToggleButtonPublish.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
-                    sendJsonMessage(message);
-                    if (mBound) {
-                        mService.connect(uri, clientId);
-                        mService.subscribe(topicSubscribe, 1);
-                    }
-                } else {
-                    // TODO: Include a new message to stop the reading process in the board
-                    if (mBound) mService.disconnect();
-                }
+    @OnCheckedChanged(R.id.togglebutton_publish)
+    void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
+            sendJsonMessage(message);
+            if (mBound) {
+                mService.connect(uri, clientId);
+                mService.subscribe(topicSubscribe, 1);
             }
-        });
+        } else {
+            // TODO: Include a new message to stop the reading process in the board
+            if (mBound) mService.disconnect();
+        }
     }
 
     @Override

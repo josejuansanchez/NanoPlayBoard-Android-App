@@ -9,11 +9,14 @@ import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class BuzzerActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = BuzzerActivity.class.getSimpleName();
-    private SeekBar mSeekbar;
-    private TextView mFrequencySelected;
+    @BindView(R.id.seekbar_notes) SeekBar mSeekbar;
+    @BindView(R.id.frequency_selected) TextView mFrequencySelected;
 
 
     @Override
@@ -21,8 +24,7 @@ public class BuzzerActivity extends NanoPlayBoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buzzer);
         setTitle("Buzzer");
-        mFrequencySelected = (TextView) findViewById(R.id.frequency_selected);
-        mSeekbar = (SeekBar) findViewById(R.id.seekbar_notes);
+        ButterKnife.bind(this);
         setListeners();
     }
 

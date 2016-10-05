@@ -12,14 +12,17 @@ import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class RGBActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = RGBActivity.class.getSimpleName();
-    private ColorPickerView mColorPickerView;
-    private View mColorSectedView;
-    private TextView mColorSelectedRed;
-    private TextView mColorSelectedGreen;
-    private TextView mColorSelectedBlue;
+    @BindView(R.id.colorpicker) ColorPickerView mColorPickerView;
+    @BindView(R.id.colorselected_view) View mColorSectedView;
+    @BindView(R.id.colorselected_red) TextView mColorSelectedRed;
+    @BindView(R.id.colorselected_green) TextView mColorSelectedGreen;
+    @BindView(R.id.colorselected_blue) TextView mColorSelectedBlue;
 
 
     @Override
@@ -27,11 +30,7 @@ public class RGBActivity extends NanoPlayBoardActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rgb);
         setTitle("RGB LED");
-        mColorPickerView = (ColorPickerView) findViewById(R.id.colorpicker);
-        mColorSectedView = (View) findViewById(R.id.colorselected_view);
-        mColorSelectedRed = (TextView) findViewById(R.id.colorselected_red);
-        mColorSelectedGreen = (TextView) findViewById(R.id.colorselected_green);
-        mColorSelectedBlue = (TextView) findViewById(R.id.colorselected_blue);
+        ButterKnife.bind(this);
         mColorPickerView.setDrawDebug(false);
         setListeners();
     }
