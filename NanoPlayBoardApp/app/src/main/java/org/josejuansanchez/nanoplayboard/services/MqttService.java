@@ -33,7 +33,7 @@ public class MqttService extends Service {
 
     @Override
     public void onDestroy() {
-        disconnect();
+        if (isConnected()) disconnect();
     }
 
     public void connect(final String uri, final String clientId, final String username, final String password) {
@@ -57,12 +57,16 @@ public class MqttService extends Service {
         }
     }
 
-    public void connect(final String uri, final String clientId) {
+    public boolean connect(final String uri, final String clientId) {
         try {
             mMqttClient = new MqttAsyncClient(uri, clientId, null);
             mMqttClient.setCallback(new MyMqttCallback());
         } catch (MqttException e) {
             e.printStackTrace();
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
 
         try {
@@ -71,7 +75,9 @@ public class MqttService extends Service {
         } catch (MqttException e) {
             Log.d(TAG, "Connection attempt failed with reason code: " + e.getReasonCode() + ":" + e.getCause());
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public void publish(final String topic, final String payload) {
@@ -103,6 +109,11 @@ public class MqttService extends Service {
             Log.d(TAG, "Disconnect failed with reason code: " + e.getReasonCode());
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        if (mMqttClient == null) return false;
+        return mMqttClient.isConnected();
     }
 
     public class MyMqttCallback implements MqttCallback {
