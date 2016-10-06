@@ -22,9 +22,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 
-public class MqttActivity extends NanoPlayBoardActivity {
+public class MqttPublishActivity extends NanoPlayBoardActivity {
 
-    public static final String TAG = MqttActivity.class.getSimpleName();
+    public static final String TAG = MqttPublishActivity.class.getSimpleName();
     private String uri;
     private String url;
     private String port;
@@ -65,7 +65,7 @@ public class MqttActivity extends NanoPlayBoardActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mqtt);
+        setContentView(R.layout.activity_mqtt_publish);
         setTitle("MQTT");
         ButterKnife.bind(this);
         readFromSharedPreferences();

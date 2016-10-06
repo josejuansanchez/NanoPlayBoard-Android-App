@@ -59,7 +59,9 @@ public class RecyclerViewActivity extends AppCompatActivity {
         mProjects.add(new Project("Led Matrix Pattern", "Draw a pattern and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Led Matrix Voice", "Say something and display it on the led matrix", R.drawable._ledmatrix));
         mProjects.add(new Project("Terminal", "Terminal for USB and Bluetooth connections", R.drawable._terminal));
-        mProjects.add(new Project("MQTT", "Send and Receive MQTT messages", R.drawable._broadcasting));
+        mProjects.add(new Project("MQTT. Publish", "Publish MQTT messages", R.drawable._mqtt));
+        mProjects.add(new Project("MQTT. Subscribe", "Subscribe to MQTT messages", R.drawable._mqtt));
+        mProjects.add(new Project("TEST: MQTT", "TEST", R.drawable._mqtt));
     }
 
     private void initializeAdapter() {
@@ -99,7 +101,13 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 intent = new Intent(RecyclerViewActivity.this, TerminalActivity.class);
                 break;
             case 8:
-                intent = new Intent(RecyclerViewActivity.this, MqttActivity.class);
+                intent = new Intent(RecyclerViewActivity.this, MqttPublishActivity.class);
+                break;
+            case 9:
+                intent = new Intent(RecyclerViewActivity.this, MqttSubscribeActivity.class);
+                break;
+            case 10:
+                intent = new Intent(RecyclerViewActivity.this, TestMqttSubscribe.class);
                 break;
         }
 
