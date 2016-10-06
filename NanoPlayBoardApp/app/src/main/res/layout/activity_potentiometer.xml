@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/_potentiometer"/>
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/_potentiometer"
+        android:contentDescription="@string/potentiometer_contentdescription" />
 
     <tr.xip.markview.MarkView
         android:id="@+id/mark_potentiometer"
@@ -29,12 +31,11 @@
         app:mv_strokeWidth="12dp"
         app:mv_textSize="48sp" />
 
-    <Button
-        android:id="@+id/button_start"
+    <ToggleButton
+        android:id="@+id/togglebutton_start_stop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="18dp"
-        android:text="Start"/>
+        android:padding="18dp" />
 
 </RelativeLayout>

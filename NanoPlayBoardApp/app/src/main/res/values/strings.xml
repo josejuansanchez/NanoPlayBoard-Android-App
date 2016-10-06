@@ -23,4 +23,6 @@
     <string name="saved_mqtt_publish_broker_url">mqtt_broker_url</string>
     <string name="saved_mqtt_publish_port">mqtt_port</string>
     <string name="saved_mqtt_publish_topic">mqtt_topic_publish</string>
+    <string name="potentiometer_contentdescription">Potentiometer</string>
+    <string name="ldr_contentdescription">LDR</string>
 </resources>
