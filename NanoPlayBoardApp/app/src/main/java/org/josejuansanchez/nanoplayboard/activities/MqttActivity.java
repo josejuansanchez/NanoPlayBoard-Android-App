@@ -16,6 +16,7 @@ import org.josejuansanchez.nanoplayboard.R;
 import org.josejuansanchez.nanoplayboard.constants.ProtocolConstants;
 import org.josejuansanchez.nanoplayboard.models.NanoPlayBoardMessage;
 import org.josejuansanchez.nanoplayboard.services.MqttService;
+import org.josejuansanchez.nanoplayboard.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +36,6 @@ public class MqttActivity extends NanoPlayBoardActivity {
     private final String MQTT_DEFAULT_BROKER_URL = "tcp://test.mosquitto.org";
     private final String MQTT_DEFAULT_PORT = "1883";
     private final String MQTT_DEFAULT_TOPIC_PUBLISH = "nanoplayboard";
-    private final String MQTT_DEFAULT_CLIENT_ID = "to-do-change-this";
 
     @BindView(R.id.edittext_broker_url) EditText mBrokerUrl;
     @BindView(R.id.edittext_port) EditText mPort;
@@ -44,6 +44,7 @@ public class MqttActivity extends NanoPlayBoardActivity {
     @BindView(R.id.edittext_topic_publish) EditText mTopicPublish;
     @BindView(R.id.togglebutton_publish) ToggleButton mToggleButtonPublish;
 
+    Utils mUtils;
     MqttService mService;
     boolean mBound = false;
 
@@ -69,6 +70,7 @@ public class MqttActivity extends NanoPlayBoardActivity {
         ButterKnife.bind(this);
         readFromSharedPreferences();
         setMqttSettings();
+        mUtils = new Utils(this);
     }
 
     @OnCheckedChanged(R.id.togglebutton_publish)
@@ -81,7 +83,7 @@ public class MqttActivity extends NanoPlayBoardActivity {
             sendJsonMessage(message);
 
             if (mBound == false) return;
-            if (mService.connect(uri, MQTT_DEFAULT_CLIENT_ID)) {
+            if (mService.connect(uri, clientId)) {
                 Snackbar.make(mBrokerUrl, R.string.mqtt_successful_connection, Snackbar.LENGTH_LONG).show();
                 writeToSharedPreferences();
             } else {
@@ -147,8 +149,8 @@ public class MqttActivity extends NanoPlayBoardActivity {
         }
 
         uri = url + ":" + port;
-
         topicPublish = mTopicPublish.getText().toString().trim();
+        clientId = mUtils.getIpAddress();
     }
 
     private boolean validateMqttSettings() {
