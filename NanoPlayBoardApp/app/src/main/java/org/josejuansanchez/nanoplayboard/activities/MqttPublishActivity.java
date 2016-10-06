@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ToggleButton;
@@ -21,6 +23,7 @@ import org.josejuansanchez.nanoplayboard.utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 
 public class MqttPublishActivity extends NanoPlayBoardActivity {
 
@@ -42,6 +45,8 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
     @BindView(R.id.edittext_username) EditText mUsername;
     @BindView(R.id.edittext_password) EditText mPassword;
     @BindView(R.id.edittext_topic_publish) EditText mTopicPublish;
+    @BindView(R.id.checkbox_potentiometer) CheckBox mCheckPotentiometer;
+    @BindView(R.id.checkbox_ldr) CheckBox mCheckLdr;
     @BindView(R.id.togglebutton_publish) ToggleButton mToggleButtonPublish;
 
     Utils mUtils;
@@ -79,9 +84,6 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
             if (validateMqttSettings() == false) return;
             getMqttSettings();
 
-            NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
-            sendJsonMessage(message);
-
             if (mBound == false) return;
             if (mService.connect(uri, clientId)) {
                 Snackbar.make(mBrokerUrl, R.string.mqtt_successful_connection, Snackbar.LENGTH_LONG).show();
@@ -96,6 +98,48 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
 
             if (mBound && mService.isConnected()) mService.disconnect();
         }
+    }
+
+    @OnClick({R.id.checkbox_potentiometer, R.id.checkbox_ldr})
+    void onClick(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch(view.getId()) {
+            case R.id.checkbox_potentiometer:
+                if (checked) {
+                    startReadingPotentiometer();
+                } else {
+                    stopReadingPotentiometer();
+                }
+                break;
+
+            case R.id.checkbox_ldr:
+                if (checked) {
+                    startReadingLdr();
+                } else {
+                    stopReadingLdr();
+                }
+                break;
+        }
+    }
+
+    void startReadingPotentiometer() {
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_READ);
+        sendJsonMessage(message);
+    }
+
+    void startReadingLdr() {
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_LDR_READ);
+        sendJsonMessage(message);
+    }
+
+    void stopReadingPotentiometer() {
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_STOP);
+        sendJsonMessage(message);
+    }
+
+    void stopReadingLdr() {
+        NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_LDR_STOP);
+        sendJsonMessage(message);
     }
 
     @Override
