@@ -33,6 +33,7 @@ public class TestMqttSubscribe extends NanoPlayBoardActivity {
     private final String MQTT_DEFAULT_BROKER_URL = "tcp://test.mosquitto.org";
     private final String MQTT_DEFAULT_PORT = "1883";
     private final String MQTT_DEFAULT_TOPIC_SUBSCRIBE = "nanoplayboard";
+    private final int MQTT_DEFAULT_QOS = 0;
 
     @BindView(R.id.mark_potentiometer) MarkView mMarkViewPotentiometer;
 
@@ -51,7 +52,7 @@ public class TestMqttSubscribe extends NanoPlayBoardActivity {
             uri = MQTT_DEFAULT_BROKER_URL + ":" + MQTT_DEFAULT_PORT;
             clientId = mUtils.getIpAddress();
             if (mService.connect(uri, clientId)) {
-                mService.subscribe(MQTT_DEFAULT_TOPIC_SUBSCRIBE, 1);
+                mService.subscribe(MQTT_DEFAULT_TOPIC_SUBSCRIBE, MQTT_DEFAULT_QOS);
             }
         }
 
