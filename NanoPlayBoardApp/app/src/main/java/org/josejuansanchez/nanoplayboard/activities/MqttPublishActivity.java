@@ -66,7 +66,7 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mqtt_publish);
-        setTitle("MQTT");
+        setTitle("MQTT. Publish");
         ButterKnife.bind(this);
         readFromSharedPreferences();
         setMqttSettings();
@@ -170,16 +170,16 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
     private void writeToSharedPreferences() {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.saved_mqtt_broker_url), url);
-        editor.putString(getString(R.string.saved_mqtt_port), port);
-        editor.putString(getString(R.string.saved_mqtt_topic_publish), topicPublish);
+        editor.putString(getString(R.string.saved_mqtt_publish_broker_url), url);
+        editor.putString(getString(R.string.saved_mqtt_publish_port), port);
+        editor.putString(getString(R.string.saved_mqtt_publish_topic), topicPublish);
         editor.commit();
     }
 
     private void readFromSharedPreferences() {
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        url = sharedPref.getString(getString(R.string.saved_mqtt_broker_url), MQTT_DEFAULT_BROKER_URL);
-        port = sharedPref.getString(getString(R.string.saved_mqtt_port), MQTT_DEFAULT_PORT);
-        topicPublish = sharedPref.getString(getString(R.string.saved_mqtt_topic_publish), MQTT_DEFAULT_TOPIC_PUBLISH);
+        url = sharedPref.getString(getString(R.string.saved_mqtt_publish_broker_url), MQTT_DEFAULT_BROKER_URL);
+        port = sharedPref.getString(getString(R.string.saved_mqtt_publish_port), MQTT_DEFAULT_PORT);
+        topicPublish = sharedPref.getString(getString(R.string.saved_mqtt_publish_topic), MQTT_DEFAULT_TOPIC_PUBLISH);
     }
 }

@@ -20,7 +20,7 @@
     <string name="mqtt_error_topic_publish">Topic Publish is a mandatory field</string>
     <string name="mqtt_error_connect">Error trying to connect to MQTT broker</string>
     <string name="mqtt_successful_connection">Successful connection!</string>
-    <string name="saved_mqtt_broker_url">mqtt_broker_url</string>
-    <string name="saved_mqtt_port">mqtt_port</string>
-    <string name="saved_mqtt_topic_publish">mqtt_topic_publish</string>
+    <string name="saved_mqtt_publish_broker_url">mqtt_broker_url</string>
+    <string name="saved_mqtt_publish_port">mqtt_port</string>
+    <string name="saved_mqtt_publish_topic">mqtt_topic_publish</string>
 </resources>
