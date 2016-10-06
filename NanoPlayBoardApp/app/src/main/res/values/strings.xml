@@ -12,8 +12,8 @@
     <string name="mqtt_button_publish">Publish</string>
     <string name="mqtt_username">Username (optional)</string>
     <string name="mqtt_topic_publish">Topic Publish</string>
-    <string name="mqtt_checkbox_ldr">LDR</string>
-    <string name="mqtt_checkbox_potentiometer">Potentiometer</string>
+    <string name="mqtt_radiobutton_ldr">LDR</string>
+    <string name="mqtt_radiobutton_potentiometer">Potentiometer</string>
     <string name="mqtt_toggle_publish_off">PUBLISH - OFF</string>
     <string name="mqtt_toggle_publish_on">PUBLISH - ON</string>
     <string name="mqtt_error_broker_url">Broker URL is a mandatory field</string>

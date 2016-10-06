@@ -9,9 +9,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.ToggleButton;
 
 import org.josejuansanchez.nanoplayboard.R;
@@ -28,6 +28,9 @@ import butterknife.OnClick;
 public class MqttPublishActivity extends NanoPlayBoardActivity {
 
     public static final String TAG = MqttPublishActivity.class.getSimpleName();
+    private final String MQTT_DEFAULT_BROKER_URL = "tcp://test.mosquitto.org";
+    private final String MQTT_DEFAULT_PORT = "1883";
+    private final String MQTT_DEFAULT_TOPIC_PUBLISH = "nanoplayboard";
     private String uri;
     private String url;
     private String port;
@@ -36,17 +39,14 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
     private String clientId;
     private String username;
     private String password;
-    private final String MQTT_DEFAULT_BROKER_URL = "tcp://test.mosquitto.org";
-    private final String MQTT_DEFAULT_PORT = "1883";
-    private final String MQTT_DEFAULT_TOPIC_PUBLISH = "nanoplayboard";
 
     @BindView(R.id.edittext_broker_url) EditText mBrokerUrl;
     @BindView(R.id.edittext_port) EditText mPort;
     @BindView(R.id.edittext_username) EditText mUsername;
     @BindView(R.id.edittext_password) EditText mPassword;
     @BindView(R.id.edittext_topic_publish) EditText mTopicPublish;
-    @BindView(R.id.checkbox_potentiometer) CheckBox mCheckPotentiometer;
-    @BindView(R.id.checkbox_ldr) CheckBox mCheckLdr;
+    @BindView(R.id.radiobutton_potentiometer) RadioButton mRadioButtonPotentiometer;
+    @BindView(R.id.radiobutton_ldr) RadioButton mRadioButtonLdr;
     @BindView(R.id.togglebutton_publish) ToggleButton mToggleButtonPublish;
 
     Utils mUtils;
@@ -85,6 +85,7 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
             getMqttSettings();
 
             if (mBound == false) return;
+
             if (mService.connect(uri, clientId)) {
                 Snackbar.make(mBrokerUrl, R.string.mqtt_successful_connection, Snackbar.LENGTH_LONG).show();
                 writeToSharedPreferences();
@@ -93,18 +94,17 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
                 mToggleButtonPublish.setChecked(false);
             }
         } else {
-            NanoPlayBoardMessage message = new NanoPlayBoardMessage(ProtocolConstants.ID_POTENTIOMETER_STOP);
-            sendJsonMessage(message);
-
+            stopReadingPotentiometer();
+            stopReadingLdr();
             if (mBound && mService.isConnected()) mService.disconnect();
         }
     }
 
-    @OnClick({R.id.checkbox_potentiometer, R.id.checkbox_ldr})
+    @OnClick({R.id.radiobutton_potentiometer, R.id.radiobutton_ldr})
     void onClick(View view) {
-        boolean checked = ((CheckBox) view).isChecked();
+        boolean checked = ((RadioButton) view).isChecked();
         switch(view.getId()) {
-            case R.id.checkbox_potentiometer:
+            case R.id.radiobutton_potentiometer:
                 if (checked) {
                     startReadingPotentiometer();
                 } else {
@@ -112,7 +112,7 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
                 }
                 break;
 
-            case R.id.checkbox_ldr:
+            case R.id.radiobutton_ldr:
                 if (checked) {
                     startReadingLdr();
                 } else {

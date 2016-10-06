@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:inputType="textUri"
         android:ems="10"
-        android:layout_marginBottom="14dp"
         android:id="@+id/edittext_broker_url"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -27,6 +26,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_below="@+id/edittext_broker_url"
+        android:layout_marginTop="16dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/edittext_port"
@@ -41,7 +41,7 @@
         android:inputType="text"
         android:ems="10"
         android:layout_below="@+id/edittext_port"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:id="@+id/edittext_username"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -57,7 +57,7 @@
         android:layout_below="@+id/edittext_username"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         android:id="@+id/edittext_password"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -71,21 +71,32 @@
         android:layout_below="@+id/edittext_password"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="16dp"
         android:id="@+id/edittext_topic_publish"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="@string/mqtt_topic_publish" />
 
-    <CheckBox
-        android:text="@string/mqtt_checkbox_ldr"
-        android:layout_width="wrap_content"
+
+    <RadioGroup
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/checkbox_potentiometer"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="13dp"
-        android:id="@+id/checkbox_ldr" />
+        android:layout_below="@+id/edittext_topic_publish">
+
+        <RadioButton
+            android:text="@string/mqtt_radiobutton_potentiometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:id="@+id/radiobutton_potentiometer" />
+
+        <RadioButton
+            android:text="@string/mqtt_radiobutton_ldr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:id="@+id/radiobutton_ldr" />
+    </RadioGroup>
 
     <ToggleButton
         android:layout_width="wrap_content"
@@ -98,15 +109,5 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
-    <CheckBox
-        android:text="@string/mqtt_checkbox_potentiometer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/checkbox_potentiometer"
-        android:layout_below="@+id/edittext_topic_publish"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="19dp" />
 
 </RelativeLayout>
