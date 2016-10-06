@@ -13,6 +13,8 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.greenrobot.eventbus.EventBus;
+import org.josejuansanchez.nanoplayboard.events.MqttStringEvent;
 
 public class MqttService extends Service {
     public static final String TAG = MqttService.class.getSimpleName();
@@ -124,6 +126,7 @@ public class MqttService extends Service {
 
         public void messageArrived(String topic, MqttMessage message) {
             Log.d(TAG, "Message arrived: " + topic + ":" + message.toString());
+            EventBus.getDefault().post(new MqttStringEvent(topic, message.toString()));
         }
 
         public void deliveryComplete(IMqttDeliveryToken token) {

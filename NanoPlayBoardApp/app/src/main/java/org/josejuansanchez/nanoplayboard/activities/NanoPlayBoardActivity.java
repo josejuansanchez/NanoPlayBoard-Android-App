@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.josejuansanchez.nanoplayboard.adapters.CollectionAdapter;
+import org.josejuansanchez.nanoplayboard.events.MqttStringEvent;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialActionEvent;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialMessageEvent;
 import org.josejuansanchez.nanoplayboard.events.UsbSerialStringEvent;
@@ -154,13 +155,22 @@ public class NanoPlayBoardActivity extends AppCompatActivity {
         onUsbSerialString(event.data);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MqttStringEvent event) {
+        Log.d(TAG, "Data received (Mqtt): " + event.topic + ":" + event.data);
+        onMqttMessage(event);
+    }
+
     protected void onUsbSerialMessage(NanoPlayBoardMessage message) {}
 
     protected void onBluetoothMessage(NanoPlayBoardMessage message) {}
 
+    protected void onMqttMessage(MqttStringEvent event) {}
+
     protected void onUsbSerialString(String data) {}
 
     protected void onBluetoothString(String data) {}
+
 
     protected void sendJsonMessage(NanoPlayBoardMessage message) {
         Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(
