@@ -31,6 +31,8 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
     private final String MQTT_DEFAULT_BROKER_URL = "tcp://test.mosquitto.org";
     private final String MQTT_DEFAULT_PORT = "1883";
     private final String MQTT_DEFAULT_TOPIC_PUBLISH = "nanoplayboard";
+    private final String MQTT_TOPIC_POTENTIOMETER = "potentiometer";
+    private final String MQTT_TOPIC_LDR = "ldr";
     private String uri;
     private String url;
     private String port;
@@ -73,9 +75,9 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
         setContentView(R.layout.activity_mqtt_publish);
         setTitle("MQTT. Publish");
         ButterKnife.bind(this);
+        mUtils = new Utils(this);
         readFromSharedPreferences();
         setMqttSettings();
-        mUtils = new Utils(this);
     }
 
     @OnCheckedChanged(R.id.togglebutton_publish)
@@ -107,16 +109,14 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
             case R.id.radiobutton_potentiometer:
                 if (checked) {
                     startReadingPotentiometer();
-                } else {
-                    stopReadingPotentiometer();
+                    setMqttTopicPublish(MQTT_TOPIC_POTENTIOMETER);
                 }
                 break;
 
             case R.id.radiobutton_ldr:
                 if (checked) {
                     startReadingLdr();
-                } else {
-                    stopReadingLdr();
+                    setMqttTopicPublish(MQTT_TOPIC_LDR);
                 }
                 break;
         }
@@ -180,7 +180,8 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
     private void setMqttSettings() {
         mBrokerUrl.setText(url);
         mPort.setText(port);
-        mTopicPublish.setText(topicPublish);
+        setMqttClientId();
+        setMqttTopicPublish("");
     }
 
     private void getMqttSettings() {
@@ -193,8 +194,15 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
         }
 
         uri = url + ":" + port;
-        topicPublish = mTopicPublish.getText().toString().trim();
+    }
+
+    private void setMqttClientId() {
         clientId = mUtils.getIpAddress();
+    }
+
+    private void setMqttTopicPublish(String name) {
+        topicPublish = MQTT_DEFAULT_TOPIC_PUBLISH + "/" + clientId + "/" + name;
+        mTopicPublish.setText(topicPublish);
     }
 
     private boolean validateMqttSettings() {
@@ -207,7 +215,6 @@ public class MqttPublishActivity extends NanoPlayBoardActivity {
             Snackbar.make(mBrokerUrl, R.string.mqtt_error_topic_publish, Snackbar.LENGTH_LONG).show();
             return false;
         }
-
         return true;
     }
 
